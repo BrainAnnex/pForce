@@ -17,3 +17,75 @@ It is very modular, and it currently contains 10 components, with no external de
 
 
 NOTE: the release of the pForce framework to Open Source is the first step towards the promised complete release to open source of the *Knowledge & Media Management* web app Brain Annex (https://brainannex.org)  As of version 4.0, pForce has an independent life from Brain Annex, but continues to be maintained and expanded by the Brain Annex project.
+
+
+**10 Components**
+
+*cookies*
+
+Static class to handle COOKIES 
+
+
+ 
+
+*dbasePDO*
+
+Class for DATABASE-INTERFACE using the PDO functions   
+
+
+ 
+
+*directedGraphs*
+
+Class to implement a Traversable Directed Acyclic Graph (DAG), consisting of Nodes and Directional Edges between 2 Node.
+Each node can carry a set of user-defined "semantics" (such as "name" and "remarks"); likewise for each edges (for example "childSequenceNo") 
+
+
+ 
+
+*formBuilder*
+
+Classes to easily build HTML forms, as well as "Control Panels" consisting of a table of such forms (each of which is referred to as a "pane")
+2 CLASSES:  "controlPanel" and "formBuilder" 
+
+
+ 
+
+*logging*
+
+Class to log SYSTEM MESSAGES (such as alerts or diagnostics) into a text file or an HTML file
+
+ 
+
+*parameterValidation*
+
+Class with static functions for PARAMETER VALIDATION
+
+
+ 
+
+*siteAuth*
+
+Class for SITE USER AUTHENTICATION, incl. login/logout management.
+Multiple independent websites are supported.
+
+ 
+
+siteMembership
+
+Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules
+Based on the entity "User-access ID" : identifying a particular membership for some user
+
+ 
+
+*templateEvaluator*
+
+Class for Template Evaluation: bare-bones version of the Python library "Jinja"
+
+
+
+*uploader*
+
+Class to facilitate File Uploads
+
+[DOCUMENTATION](https://brainannex.org/viewer.php?ac=2&cat=20)
