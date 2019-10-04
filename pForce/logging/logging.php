@@ -1,6 +1,6 @@
 <?php
 /* 
-  	Last revised  9/29/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
+  	Last revised  10/3/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
  
 	Class to log SYSTEM MESSAGES (such as alerts or diagnostics) into a text file or an HTML file
  	
@@ -10,7 +10,7 @@
  
  	EXAMPLE OF USAGE:
  
- 		$myLog = new logging("logFile.htm");
+ 		$myLog = new logging("myLogFile.htm");
 		
 		$myLog->insertSeparator();
 		$myLog->fileLogging("Operation started");
@@ -52,10 +52,10 @@ namespace pforce;		// Part of the "pForce" Web Framework
 
 interface loggingInterface
 {
-    public function fileLogging($msg);
-    public function insertSeparator();
 	public function logMessage($level, $msg, $style = "");
 	public function logErrorMessage($msg);
+	public function insertSeparator();
+	public function fileLogging($msg);
 }
 
 
@@ -85,14 +85,11 @@ class logging implements loggingInterface
 			  CONSTRUCTOR
 	 *****************************/
 
-	function  __construct($logFilename)  
+	function  __construct($logFilename)
+	// Specify a filename to use for logging; it will generally be a .txt for or .htm filed depending on the "htmlLogging" property
 	{
-		if ($logFilename)  {		// A simple check for the presence of a name; TO-DO: check whether the filename is legit
+		if ($logFilename)		// A simple check for the presence of a name; TO-DO: check whether the filename is legit
 			$this->logFile = $logFilename;
-			return true;
-		}
-		else
-			return false;
 	}
 	
 	
@@ -101,13 +98,71 @@ class logging implements loggingInterface
 			PUBLIC METHODS
 	 *****************************/
 	 
+	public function logMessage($level, $msg, $style = "")
+	/* 	HIGH-level function to log the given text message to the pre-specified log file (whose name is stored in the class property "logFile").  If the log file doesn't exist, it gets created.
+		A new line is added after each entry.
+		
+		ARGUMENTS:
+			level		An integer indicating the "importance": 0 (most important), 1, 2, ...
+			msg			The message to log
+			style		Optional HTML styling to apply to the message, using a <span> tag.  Do NOT include the <span> tag in the argument.
+			
+		RETURN VALUE: true if successful, or false if not.
+	 */
+	{
+		if ($level == 0)  {					// Highest-imporance message
+			$this->insertSeparator();
+			$msg = "~~~~ ". $msg;
+		}
+		else
+			$level += 1;	// To better differentiate between non-indent and indent entries
+
+		// Lower-priority messages get indented progressively more
+		if ($this->htmlLogging)
+			$this->indentAmount = $this->indentIncrementHTML * $level;
+		else
+			$this->indentAmount = 2 + $this->indentIncrementText * $level;
+			
+		$this->style = $style;
+		
+		return $this->fileLogging($msg);
+	}
+		
+	
+	
+	public function logErrorMessage($msg)
+	/*	Log an error message.  Same as regular logging, but with more emphasis, and the backtrace of the call stack
+	 */
+	{
+		$this->logMessage(0, "************** ERROR: $msg *****************", "color:red");
+		
+		$this->logDebugBacktrace();		// A pretty-printed stack backtrace
+	}
+	
+	
+	
+	public function insertSeparator()
+	// Append the standard separator (and a new line) to the log file
+	{
+		if ($this->htmlLogging)
+			$msg = $this->separator . "<br>";
+		else
+			$msg = $this->separator;					
+			
+		$msg .= $this->newline;
+		
+		$this->logIntoFile($msg);
+	}
+
+
+
 	public function fileLogging($msg)
 	/* 	LOW-level function to append the given message to the log file (or to create a log file, if not present.)
 		A newline is automatically added.
 		If htmlLogging is enabled, then any HTML in the message (which could mess up the log file's viewing) is protected with htmlentities
 		
-		The message is optionally modified by:
-				- the string: "date time", where date is mm/dd/yy
+		The message is optionally modified by specifications indicated by various object properties:
+				- the string "date time", where date is mm/dd/yy
 				- an indentation
 				- a user-specified prefix
 				- a user-specifief HTML style
@@ -174,62 +229,10 @@ class logging implements loggingInterface
 		$status = $this->logIntoFile($msg);		// Perform the file-append operation
 		
 		return $status;
-	}
+		
+	} // fileLogging()
+	
 
-	
-	public function insertSeparator()
-	// Append the standard separator (and a new line) to the log file
-	{
-		if ($this->htmlLogging)
-			$msg = $this->separator . "<br>";
-		else
-			$msg = $this->separator;					
-			
-		$msg .= $this->newline;
-		
-		$this->logIntoFile($msg);
-	}
-	
-	
-	
-	public function logMessage($level, $msg, $style = "")
-	/* 	HIGH-level function to log the given text message to the designated log file (whose name is stored in the class property "logFile").  If the log file doesn't exist, it gets created.
-		A new line is added after each entry.
-		
-		ARGUMENTS:
-			level		An integer indicating the "importance": 0 (most important), 1, 2, ...
-			msg			The message to log
-			style		Optional HTML styling to apply to the message, using a <span> tag.  Do NOT include the <span> tag
-			
-		RETURN VALUE: true if successful, or false if not.
-	 */
-	{
-		if ($level == 0)  {					// Highest-imporance message
-			$this->insertSeparator();
-			$msg = "~~~~ ". $msg;
-		}
-		else
-			$level += 1;	// To better differentiate between non-indent and indent entries
-
-		if ($this->htmlLogging)
-			$this->indentAmount = $this->indentIncrementHTML * $level;
-		else
-			$this->indentAmount = 2 + $this->indentIncrementText * $level;
-			
-		$this->style = $style;
-		
-		return $this->fileLogging($msg);
-	}
-		
-	
-	public function logErrorMessage($msg)
-	/*	Log an error message.  Same as regular logging, but with more emphasis, and the backtrace of the call stack
-	 */
-	{
-		$this->logMessage(0, "************** ERROR: $msg *****************", "color:red");
-		
-		$this->logDebugBacktrace();
-	}
 	
 	
 	

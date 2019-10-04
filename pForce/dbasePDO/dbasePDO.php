@@ -1,6 +1,6 @@
 <?php
 /*
- 	Last revised 10/1/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
+ 	Last revised 10/2/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
  
   	Class for DATABASE-INTERFACE using the PDO functions ( see https://BrainAnnex.org/viewer.php?ac=2&cat=5 )
 	
@@ -563,21 +563,23 @@ class dbasePDO  {
 
 	
 	public function pdo_num_rows($PDOstatement)
-	/* 	This function emulates mysql_num_rows(), but only works for MySQL databases.
+	/* 	This function emulates the deprecated function mysql_num_rows(), but only works for MySQL databases.
 	
-		1) 	It returns the number of rows affected by the last DELETE, INSERT, or UPDATE statement executed by the specified PDOStatement object. 
+		Its result depends on the type of the last SQL statement executed.
+	
+		1) 	DELETE, INSERT, or UPDATE:  it returns the number of rows affected by the last DELETE, INSERT, or UPDATE statement executed by the specified PDOStatement object. 
 		
-		2) 	If the last SQL statement executed by the associated PDOStatement was a SELECT statement, some databases may return the number of rows returned by that statement. 
+		2) 	SELECT:  if the last SQL statement executed by the associated PDOStatement was a SELECT statement, some databases may return the number of rows returned by that statement. 
 			However, this behaviour is not guaranteed for all databases and should not be relied on for portable applications. 
 			(See  http://php.net/manual/en/pdostatement.rowcount.php  and  http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)
 			
 		In case of error, it return false
 	 */
 	{
-		if(! $PDOstatement instanceof PDOStatement)  { 	// If the argument is not an expected "PDOStatement" object
+		if(! $PDOstatement instanceof \PDOStatement)  { 	// If the argument is not an expected "PDOStatement" object; the \ indicates the global namespace
 			$this->logErrorMessage("pdo_num_rows(): the argument is not a PDO statement");
-			$this->errorSummary = "Failure of looking up the number of records in the database";
-			$this->errorDetails = "Reason: the argument is not a PDO statement";
+			$this->errorSummary = "Failure of extracting the number of records in the database";
+			$this->errorDetails = "Reason: the argument to pdo_num_rows() is not a PDO statement";
 			return false;
 		}
 
