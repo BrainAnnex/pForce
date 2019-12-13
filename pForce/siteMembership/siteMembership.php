@@ -1,6 +1,6 @@
 <?php
 /* 	
-	Last revised 9/29/2019.   Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
+	Last revised 12/9/2019.   Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
 
 	Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules
 	
@@ -61,7 +61,7 @@ class siteMembership {
 	
 	// PRIVATE PROPERTIES
 	private $membershipTable = "siteSubscriptions";	// Table used for user account information
-	private $dbPDO;						// Object for database operations
+	private $dbPDO;									// Object for database operations
 
 	
 	
@@ -70,6 +70,7 @@ class siteMembership {
 	 ****************************/
 	 
 	public function __construct($dbPDO)
+	// Argument:  Object for database operations
 	{
 		$this->dbPDO = $dbPDO;
 	}
@@ -244,9 +245,9 @@ class siteMembership {
 
 	
 	public function addNewAccount($name, $email, $pass, $newSiteID = null)
-	/* 	Add a new account, including a user who is an admin for that account.
+	/* 	Add a new account to the site, including a user who is an admin for that account.
 		Optionally, accept a value for the new siteID (typically used for sites identified by text codes, such as "e", "s"); 
-		if a value isn't provided, siteID's are assumed to be consecutive integers, and the next available number is used.
+		if a value isn't provided, the next available table record ID (for example 23) is used (as a string; for example "23").
 		Return the new account ID if all operations were successful, or -1 othewise; in case of errors, also set the property "errorSummary"
 	 */
 	{
@@ -255,13 +256,13 @@ class siteMembership {
 		 
 		if (!$newSiteID)  {
 			// Locate the ID of the last account added (if any)
-			$sql = "SELECT max(`siteID`) FROM $this->membershipTable";
+			$sql = "SELECT max(`ID`) FROM $this->membershipTable";
 			$lastAccountID = $this->dbPDO->selectSQLOneValue($sql);
 					
 			if (! $lastAccountID)
 				$newSiteID = 1;						// We're adding a first account (i.e. a new installation)
 			else
-				$newSiteID = $lastAccountID + 1;		// Adding a new account
+				$newSiteID = $lastAccountID + 1;	// Adding a new account
 		}
 		
 		

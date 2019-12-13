@@ -1,6 +1,6 @@
 <?php
 /*
- 	Last revised 10/2/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
+ 	Last revised 10/6/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
  
   	Class for DATABASE-INTERFACE using the PDO functions ( see https://BrainAnnex.org/viewer.php?ac=2&cat=5 )
 	
@@ -441,9 +441,10 @@ class dbasePDO  {
 	
 	
 	public function selectSQLOneRecord($sql, $bindings = false)
-	/*	Run the specified SQL SELECT statement, and return the first row of the result (as an assoc/num array.) 
-		In case of no records, return null.
-		In case of error, return false.
+	/*	Run the specified SQL SELECT statement,
+		RETURN the first row of the result (as an assoc/num array.) 
+			In case of no records, return null.
+			In case of error, return false.
 		
 		Typically used with SELECT statements that return a single record.
 		Note: pdo_num_rows() cannot be used after this function call, 
@@ -603,12 +604,18 @@ class dbasePDO  {
 	}
 
 
-	public function countRecords($table, $selectSubquery)
-	/* 	Return the number of records in the given table when the specified subquery (the part *after* the WHERE in the sql query) is applied
-		Example: $table = "myTable"  and  $selectSubquery = "`ID` > `0"
+	public function countRecords($table, $selectSubquery = "")
+	/* 	Return the number of records in the given table when the specified subquery (the part *after* the WHERE in the sql query) is applied;
+		if the subquery is a blank string or missing, then the total number of records in the table is returned.
+		In case of error, return false.  A === false check on the return value should be done to distinguish zero records from an error condition.
+		
+		EXAMPLE:  $number_of_records = countRecords("myTable" , "`ID` > `0");
 	 */
 	{
-		$sql = "SELECT count(*) FROM $table WHERE $selectSubquery";
+		if (! $selectSubquery)
+			$sql = "SELECT count(*) FROM $table";
+		else
+			$sql = "SELECT count(*) FROM $table WHERE $selectSubquery";
 		
 		return $this->selectSQLOneValue($sql);
 	}
@@ -616,7 +623,7 @@ class dbasePDO  {
 
 
 	public function modificationSQL($sql, $bindings = false) 
-	/*	Run the specified "modification" SQL (i.e. UPDATE, INSERT, DELETE or CREATE TABLE query.)
+	/*	Run the specified "modification" SQL (i.e. UPDATE, INSERT, DELETE , CREATE TABLE , or DROP TABLE.)
 			
 		If the optional argument $bindings is specified, the SQL must contain one or more "?" (without quotes), 
 			and $bindings must contain an array of values, or a single value.
@@ -636,9 +643,9 @@ class dbasePDO  {
 						$bindings = array(":username" => "me myself", ":email" => "a@b.com");
 		
 		RETURN VALUE
-			In case of successful insert, update or delete operations, return the number of affected rows.
-			In case of successful create table operations, return 0	.
-			In case of error, -1 is returned, error messages are logged, and some error properties get set.
+			In case of successful insert, update or delete operations, return the number of affected rows
+			In case of successful create/drop table operations, return 0
+			In case of error, -1 is returned, error messages are logged, and some error properties get set
 	 */ 
 	{	
 		if (! $this->dbHandler)  {
