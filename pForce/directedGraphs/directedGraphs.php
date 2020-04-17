@@ -1,6 +1,6 @@
 <?php
 /* 	
-	Last revised 9/29/2019.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
+	Last revised 4/16/2020.  Distributed as part of the "pForce Web Framework".  For more info: https://github.com/BrainAnnex/pForce
 
 	Class to implement a Traversable Directed Acyclic Graph (DAG), consisting of Nodes and Directional Edges between 2 Nodes
 	
@@ -16,6 +16,8 @@
 	
 	
 	For debugging or logging purposes, the debugLogSQL() function available to thru the dbasePDO object may be used
+	
+	Applications of DAGs include implementation of inter-related Categories or of social networks.
 
 
 	@author  Julian West <julian@BrainAnnex.org>
@@ -342,7 +344,9 @@ class directedGraph  {
 	
 	
 	public function removeEdge($parentID, $childID)
-	/* 	Remove the edge between the specified nodes.  No check is done about the child node possibly becoming orphaned as a result.
+	/* 	Remove the edge between the specified nodes.  
+	
+		IMPORTANT: No check is done about the child node possibly becoming orphaned as a result.  The calling function might opt to use the method numberParents() to determine if the node is an only child.
 		
 		In case of failure, return an error message, and possibly set the "errorSummary" and "errorDetails" properties;
 		if successful, return a blank string.
@@ -600,6 +604,7 @@ class directedGraph  {
 	} // retrieveNodes()
 	
 	
+	
 	public function nodeSemanticsMatches($fieldName, $fieldValue)
 	/* 	Locate all the nodes whose value in the specified semantic field matches the given string (as a substring.)
 		RETURN an array of matches, sorted by the specified semantic field; each entry is an associative/enum array of at least 2 parts: [node ID, fieldName, any_other_semantic_fields].
@@ -777,8 +782,8 @@ class directedGraph  {
 	
 	
 	public function fetchParents($nodeID, $sortby = false)
-	/* 	Fetch all the parents of the given node, optionally sorted as requested, within the constraints of the optional "SQLclause" property.
-		Return a (possibly empty) associative/enum array of elements; each of them is an array that contains: [parentID, <all the semantic fields>]
+	/* 	Fetch all the parents of the given node, optionally sorted as requested, within the constraints of the optional "SQLclause" object property.
+		RETURN a (possibly empty) associative/enum array of elements; each of them is an array that contains: [parentID, <all the semantic fields>]
 		In case of failure, false is returned.
 		Note: it's convenient to have an array as a result, because it can be rewound if desired, with the reset() function.
 	 */
@@ -791,7 +796,7 @@ class directedGraph  {
 			//return  $this->parents[$nodeID];		// If it has already been computed and saved, no need to re-compute.  BE CAREFUL ABOUT POTENTIALLY INCORRECT/OUTDATED INFO STORED HERE!!
 
 
-		/* If we get here, we're NOT at the root.  Look up all the parents of this node (their ID's, names and remarks)
+		/* If we get here, we're NOT at the root.  Look up all the parents of this node (their ID's, names and remarks), within the constraints of the optional "SQLclause" object property
 		 */
 
 		$sql = "SELECT *
@@ -810,13 +815,37 @@ class directedGraph  {
 		if ($result === false)
 			return false;		// Failure was encountered in running the SQL statement
 
-		$resultArray = $result->fetchall();		// Save the result (a traversable object) into an array
+		$resultArray = $result->fetchall();			// Save the result (a traversable object) into an array
 		
-		$this->parents[$nodeID] = $resultArray;
+		$this->parents[$nodeID] = $resultArray;		// Also save for future reference
 		
 		return $resultArray;
 
 	} // fetchParents()
+	
+	
+	public function numberParents($nodeID)
+	/* 	Return the number of parents of the given node, within the constraints of the optional "SQLclause" object property.
+		In case of failure, false is returned.
+	 */
+	{
+		if ($nodeID == $this->CATEGORY_ROOT_NODE)	// If it is the root...
+			return  0;								// ... the roor has no parents
+
+
+		/* If we get here, we're NOT at the root.  Count all the parents of this node, within the constraints of the optional "SQLclause" object property.
+		 */
+
+		$sql = "SELECT COUNT(*)
+				FROM $this->edgesTable JOIN $this->nodesTable
+					ON $this->edgesTable.parentID = $this->nodesTable.ID
+					WHERE childID = ?
+						$this->sqlANDClause";
+		
+		$result = $this->db->selectSQLOneValue($sql, $nodeID);
+		
+		return $result;
+	}
 	
 
 
@@ -891,18 +920,7 @@ class directedGraph  {
 
 	} // locateDanglingEdges()
 	
-	
-	/*
-	function graphTraversalArray()
-	// Return the current array with the graph traversal info; if missing, computer it first
 
-	{
-		if (! $this->graphTraversal)
-			$this->traverseGraph();
-			
-		return $this->graphTraversal;
-	}
-	*/
 	
 	
 	function traverseGraphAndSave($sortby) 
@@ -943,6 +961,18 @@ class directedGraph  {
 	}
 	
 
+	/*
+	function graphTraversalArray()
+	// Return the current array with the graph traversal info; if missing, computer it first
+
+	{
+		if (! $this->graphTraversal)
+			$this->traverseGraph();
+			
+		return $this->graphTraversal;
+	}
+	*/
+	
 	
 	function traverseGraph($sortby) 
 	/* 	Traverse the graph from its root, and build (or rebuild) the array of graph-traversal information, 
@@ -979,6 +1009,7 @@ class directedGraph  {
 		return $this->recursiveGraphTraversalInMemory($this->CATEGORY_ROOT_NODE, 0);
 		
 	} // traverseGraph()
+
 
 
 	function recursiveGraphTraversalInMemory($nodeID, $depth)
