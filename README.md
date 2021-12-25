@@ -8,7 +8,7 @@ pForce: **May the *PHP* Force be with you!**
 
 The pForce Framework was originally developed as part of the "Brain Annex" project, but - as of version 4.0 - is now independent of it.
 
-This framework has been in active, continuous use on multiple web apps for years - some components for about a decade - and has been *released as Open Source* in Oct. 2019 as version 4.0
+This framework has been in active, continuous use on multiple web apps for years - some components for about a decade - and has been *released to Open Source* in Oct. 2019 as version 4.0
 
 It is very modular, and it currently contains 10 components, with no external dependencies.
 
@@ -45,7 +45,8 @@ Each node can carry a set of user-defined "semantics" (such as "name" and "remar
 
 ## *formBuilder*
 
-Classes to easily build HTML forms, as well as "Control Panels" consisting of a table of such forms (each of which is referred to as a "pane")
+Classes to easily build HTML forms, as well as "Control Panels" consisting of a table of such forms (each of which is referred to as a "pane").
+
 2 CLASSES:  "controlPanel" and "formBuilder" 
 
 
@@ -80,7 +81,7 @@ Based on the entity "User-access ID" : identifying a particular membership for s
 
 ## *templateEvaluator*
 
-Class for Template Evaluation: bare-bones version of the Python library "Jinja"
+Class for Template Evaluation: bare-bones counterpart of the Python library "Jinja"
 
 
 
