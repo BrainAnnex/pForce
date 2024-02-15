@@ -16,3 +16,77 @@ public static $httponly = true;           // Flag indicating that the cook
 public static $path = "/";                // The path on the server in which the cookie will be available from; 
                                           // if set to '/', the cookie will be available within the entire domain  
 </pre>
+
+<br>
+<h3>Public Methods</h3>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public static function set($name, $value, $expire, $domain = false)</strong><br>
+<tt>&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Cookie-setting function. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTART: it must be called &nbsp;*prior* to outputting any text<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String with cookie name (cannot be empty)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$value &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String with cookie value<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$expire &nbsp;&nbsp;&nbsp; &nbsp;The time (expressed as a Unix timestamp) when the cookie is set to expire.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If set to 0, it&#39;ll expire at the end of the session (when the browser closes)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;To avoid having to deal with Unix-timestamp values, more specialized methods, such as setDays(), are also provided in this class.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$domain &nbsp;&nbsp; &nbsp;[OPTIONAL] Site&#39;s domain name (such as &quot;example.com&quot;); if missing, the domain is inferred from the server variable &quot;SERVER_NAME&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: If output exists prior to calling this function, this function will fail and return FALSE;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if it successfully runs, it will return TRUE. &nbsp;(This does NOT indicate whether the user accepted the cookie.)<br>
+&nbsp;&nbsp; &nbsp; */</tt></p>
+
+<p><br>
+&nbsp;<strong>&nbsp; &nbsp;public static function setSessionOnly($name, $value, $domain = false)</strong><br>
+&nbsp;&nbsp; &nbsp;// Same as set(), but the cookie will expire at the end of the session (when the browser closes)<br>
+&nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public static function setDays($name, $value, $expireDays, $domain = false)</strong><br>
+&nbsp;&nbsp; &nbsp;// Same as set(), but with the expiration time expressed as in &quot;number of days from now&quot;<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function setYears($name, $value, $expireYears, $domain = false)</strong><br>
+&nbsp;&nbsp; &nbsp;// Same as set(), but with the expiration time expressed as in &quot;number of years from now&quot;<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public static function clear($name, $domain = false)</strong><br>
+<tt>&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Clear the cookie with the given name, in the specified domain (such as &quot;example.com&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTART: it must be called &nbsp;*prior* to outputting any text.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If the site&#39;s domain name (such as &quot;example.com&quot;) is missing, it is inferred from the server variable &quot;SERVER_NAME&quot;</tt></p>
+
+<p><tt>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: If output exists prior to calling this function, this function will fail and return FALSE;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if it successfully runs, it will return TRUE. &nbsp;(This does not indicate whether the user accepted the cookie.)<br>
+&nbsp;&nbsp; &nbsp; */</tt><br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function get($name)</strong><br>
+&nbsp;&nbsp; &nbsp;// Return the value of the cookie with the specified name (in the domain of the calling script); if none is found, return false<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function isCookieSet($name)</strong><br>
+&nbsp;&nbsp; &nbsp;// Return true if a cookie by that name is set (in the domain of the calling script)<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function requireHTTPS($required = true)</strong><br>
+&nbsp;&nbsp; &nbsp;// Use this function to require an HTTPS connection (or to turn off such a requirement if previously set)<br>
+&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public static function forceHTTPonly($force = true)</strong><br>
+&nbsp;&nbsp; &nbsp;// Use this function to restrict the cookie&#39;s access thru the HTTP protocol, rather than thru JavaScript (or to turn off such a requirement if previously set)<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function setPath($path = &quot;/&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;// &nbsp;&nbsp; Use this function to set the path on the server in which the cookie will be available from;<br>
+&nbsp;&nbsp; &nbsp;//&nbsp;&nbsp; &nbsp;if using &#39;/&#39;, the cookie will be available within the entire domain</p>
+
+
+<br><br>
+<hr>
+
+<h2>dbasePDO</h2>
+<p>Class for DATABASE-INTERFACE using the PDO functions</p>
