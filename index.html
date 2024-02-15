@@ -1,1 +1,18 @@
-<h1>Future Guide</h1>
+<h1>pForce PHP Web Framework - Reference Guide</h1>
+
+<h2>cookies</h2>
+<p>Static class to handle COOKIES</p>
+
+<h3>Public Properties</h3>
+
+<pre>
+public static $httpsRequired = false;     // Flag indicating whether the cookie should be sent over HTTPS only
+    
+                                                
+public static $httponly = true;           // Flag indicating that the cookie will be made accessible only 
+                                          // through the HTTP protocol - and not thru JavaScript (for security)
+    
+    
+public static $path = "/";                // The path on the server in which the cookie will be available from; 
+                                          // if set to '/', the cookie will be available within the entire domain  
+</pre>
