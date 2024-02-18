@@ -1,7 +1,7 @@
 <html>
   <head>
     <style type="text/css">
-  	   div.library {
+      div.library {
           width: 75%;
           border: 1px solid #DDD; 
           margin-left:30px; 
@@ -31,6 +31,7 @@
       p.description {
         color: #AAAAAA;
         font-size:14px;
+        font-weight: bold;
       }
 
       pre {
@@ -47,11 +48,16 @@
   <span style="color: brown">pForce</span> &ndash; a PHP Web Framework : Reference Guide
 </h1>
 
+  
+<h2>10 modules:</h2> 
 
+  cookies, dbasePDO, directedGraphs, formBuilder, logging, parameterValidation, siteAuth, siteMembership, templateEvaluator, uploader
+
+  
   
 <div class="library" style="">
   <p class="name">cookies</p>
-  <p class="description">Static class to handle COOKIES</p>
+  <div class="description">Static class to handle COOKIES</div>
 </div>
 
 <h3>Public Properties</h3>
@@ -74,7 +80,7 @@ public static $path = "/";                // The path on the server in w
 
 <p><strong>&nbsp;&nbsp; &nbsp;public static function set($name, $value, $expire, $domain = false)</strong><br>
 <tt>&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Cookie-setting function. &nbsp;<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTART: it must be called &nbsp;*prior* to outputting any text<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTANT: it must be called &nbsp;*prior* to outputting any text<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String with cookie name (cannot be empty)<br>
@@ -143,12 +149,13 @@ public static $path = "/";                // The path on the server in w
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
   <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions<br>   
+  <div class="description"><b>Class for DATABASE-INTERFACE using the PDO functions</b>
+  <br>   
   <br>
   DEPENDENCIES:
    <br><br>
    - logging [optional]    
-  </p>
+  </div>
 </div>
   
 <h3>Public Properties</h3>
@@ -591,22 +598,23 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
   <p class="name">directedGraphs</p>
-  <p class="description">
-  Each node can carry a set of user-defined "semantics" (such as "name" and "remarks"); likewise for each edges (for example "childSequenceNo")<br>
-  <br>
-  An optional SQL clause can optionally be set by the invoking module (typically to enforce access restrictions, permissions, etc.)<br>
-  <br>
-  <br> 
-  DEPENDENCIES:  <br>
-  <br> 
-        1) dbasePDO<br>
-        2) parameterValidation<br>
- <br>   
- <br>   
-  For debugging or logging purposes, the debugLogSQL() function available to thru the dbasePDO object may be used
-  <br>
-  Applications of DAGs include implementation of inter-related Categories or of social networks. 
-  </p>  
+  <div class="description">
+    <b>Each node can carry a set of user-defined "semantics" (such as "name" and "remarks"); likewise for each edges (for example "childSequenceNo")</b>
+    <br>
+    <br>
+    An optional SQL clause can optionally be set by the invoking module (typically to enforce access restrictions, permissions, etc.)<br>
+    <br>
+    <br> 
+    DEPENDENCIES:  <br>
+    <br> 
+          1) dbasePDO<br>
+          2) parameterValidation<br>
+   <br>   
+   <br>   
+    For debugging or logging purposes, the debugLogSQL() function available to thru the dbasePDO object may be used
+    <br>
+    Applications of DAGs include implementation of inter-related Categories or of social networks. 
+  </div>  
 </div>
 
 <h3>Public Properties</h3>
@@ -903,9 +911,10 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
   <p class="name">formBuilder</p>
-  <p class="description">
-    Classes to easily build HTML forms, as well as "Control Panels" ("Dashboards") consisting of a table of such forms (each of which is referred to as a "pane")<br>
-        <br>
+  <div class="description">
+    <b>Classes to easily build HTML forms, as well as "Control Panels" ("Dashboards") consisting of a table of such forms (each of which is referred to as a "pane")</b>
+    <br>
+    <br>
     <br>
     2 classes:<br>
     <br>
@@ -918,7 +927,7 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
     <br>
     <br>
     DEPENDENCIES:  None
-  </p>  
+  </div>  
 </div>
 
 <h3>controlPanel &ndash; Public Properties</h3>
@@ -1116,8 +1125,9 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
   <p class="name">logging </p>
-  <p class="description">
-    Class to log SYSTEM MESSAGES (such as alerts or diagnostics) into a text file or an HTML file<br>
+  <div class="description">
+    <b>Class to log SYSTEM MESSAGES (such as alerts or diagnostics) into a text file or an HTML file</b>
+    <br>
     &nbsp;&nbsp;&nbsp; &nbsp;<br>
     &nbsp;&nbsp;&nbsp; &nbsp;<br>
     &nbsp;&nbsp;&nbsp; &nbsp;<strong>DEPENDENCIES</strong>: &nbsp;None<br>
@@ -1125,9 +1135,9 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
     &nbsp;<br>
     &nbsp;&nbsp;&nbsp; &nbsp;<strong>EXAMPLE OF USAGE:</strong><br>
     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-  </p>
+  </div>
 
-  <div style="width:50%; background:#eeeeee; border:1px solid #cccccc; padding:5px 10px">
+  <div style="width:50%; background:#eeeeee; border:1px solid #dddddd; padding:5px 10px">
     <tt>
     &nbsp; &nbsp; &nbsp; &nbsp; $myLog = new logging(&quot;myLogFile.htm&quot;);<br>
     &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
@@ -1214,17 +1224,17 @@ public $separator = "___________________________________________________________
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
   <p class="name">parameterValidation</p>
-  <p class="description">
-    Class with static functions for PARAMETER VALIDATION (for example, for site security) <br>
- <br>
- <br>
-     DEPENDENCIES:  None<br>
- <br>
- <br>
-     USAGE EXAMPLE:<br>
-   <br> 
-        parameterValidation::validateInteger($myValue)
-  </p>  
+  <div class="description">
+     <b>Class with static functions for PARAMETER VALIDATION (for example, for site security)</b> <br>
+     <br>
+     <br>
+         DEPENDENCIES:  None<br>
+     <br>
+     <br>
+         USAGE EXAMPLE:<br>
+       <br> 
+        &nbsp;&nbsp; &nbsp;    parameterValidation::validateInteger($myValue)
+  </div>  
 </div>
 
 
@@ -1462,16 +1472,16 @@ public $loginURL;                             // URL to re-direct to if login is
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
   <p class="name">siteMembership </p>
-  <p class="description">
-    Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules<br>
+  <div class="description">
+    <b>Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules</b><br>
     <br>
-  Based on the entity "User-access ID" : identifying a particular membership for some user<br>
+    Based on the entity "User-access ID" : identifying a particular membership for some user<br>
     <br>
     <br>
     DEPENDENCIES: <br>  
     <br>
     &nbsp;&nbsp; &nbsp;       - dbasePDO
-  </p>  
+  </div>  
 </div>
 
 <h3>Public Properties</h3>
@@ -1686,14 +1696,14 @@ public  $errors = "";       // The last error message, if any
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
   <p class="name">uploader </p>
-  <p class="description">
-    Class to facilitate File Uploads<br>
+  <div class="description">
+    <b>Class to facilitate File Uploads</b><br>
     <br>
-     <br> 
+    <br> 
     DEPENDENCIES:<br>
     <br>
     &nbsp;&nbsp; &nbsp;    - logging
-  </p>  
+  </div>  
 </div>
 
 <h3>Public Properties</h3>
