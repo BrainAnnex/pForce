@@ -19,9 +19,14 @@
           padding-top: 0px;
           padding-bottom: 10px;
       }
+      div.description {
+        color: #AAAAAA;
+        font-size:14px;
+      }
+
       
       p.name {
-        font-size:24px;
+        font-size:28px;
       }
       p.description {
         color: #AAAAAA;
@@ -1286,7 +1291,7 @@ public $separator = "___________________________________________________________
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
   <p class="name">siteAuth</p>
-  <p class="description">
+  <div class="description">
       <p><strong>Class for SITE USER AUTHENTICATION, incl. login/logout management.</strong><br>
       &nbsp;&nbsp; &nbsp;<br>
       &nbsp;&nbsp; &nbsp;Multiple independent websites are supported.<br>
@@ -1308,7 +1313,7 @@ public $separator = "___________________________________________________________
       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;- dbasePDO&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This in turn, depends on the &quot;logging&quot; class<br>
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- cookies&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Static methods to set, clear, read and check cookies<br>
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- logging&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Use to log messages (diagnostics, etc) on the server</p>
-  </p>  
+  </div>  
 </div>
 
 <h3>Public Properties</h3>
@@ -1458,14 +1463,14 @@ public $loginURL;                             // URL to re-direct to if login is
  <div class="library" style="">
   <p class="name">siteMembership </p>
   <p class="description">
-Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules<br>
+    Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules<br>
     <br>
-Based on the entity "User-access ID" : identifying a particular membership for some user<br>
+  Based on the entity "User-access ID" : identifying a particular membership for some user<br>
     <br>
     <br>
-DEPENDENCIES: <br>  
+    DEPENDENCIES: <br>  
     <br>
-            - dbasePDO
+    &nbsp;&nbsp; &nbsp;       - dbasePDO
   </p>  
 </div>
 
@@ -1607,7 +1612,7 @@ public $errorSummary;            // Summary of the last error, if applicable
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
   <p class="name">templateEvaluator </p>
-  <p class="description">
+  <div class="description">
       <p><strong>Class for Template Evaluation: bare-bones counterpart of the Python library &quot;Jinja&quot;</strong><br>
       &nbsp;&nbsp; &nbsp;<br>
       &nbsp;&nbsp; &nbsp;<br>
@@ -1640,7 +1645,7 @@ public $errorSummary;            // Summary of the last error, if applicable
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$templ_eval-&gt;registerFunction(&quot;foo&quot;);&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// foo() become Registed Function 1 for this site<br>
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example: <code>&quot;Go to link {RF(1, {productID})}&quot;</code></p>
-  </p>  
+  </div>  
 </div>
 
 <h3>Public Properties</h3>
@@ -1682,12 +1687,12 @@ public  $errors = "";       // The last error message, if any
  <div class="library" style="">
   <p class="name">uploader </p>
   <p class="description">
-Class to facilitate File Uploads<br>
+    Class to facilitate File Uploads<br>
     <br>
-   <br> 
+     <br> 
     DEPENDENCIES:<br>
     <br>
-        - logging
+    &nbsp;&nbsp; &nbsp;    - logging
   </p>  
 </div>
 
