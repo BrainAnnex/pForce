@@ -19,12 +19,17 @@
           padding-top: 10px;
           padding-bottom: 10px;
       }
+      
       p.name {
         font-size:24px;
       }
       p.description {
         color: #AAAAAA;
         font-size:14px;
+      }
+
+      pre {
+        margin-left: 20px;
       }
     </style>
   </head>
@@ -134,6 +139,7 @@ public static $path = "/";                // The path on the server in w
 <div class="library" style="">
   <p class="name">dbasePDO</p>
   <p class="description">Class for DATABASE-INTERFACE using the PDO functions<br>   
+  <br>
   DEPENDENCIES:
    <br><br>
    - logging [optional]    
@@ -912,15 +918,15 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
 
 <h3>controlPanel &ndash; Public Properties</h3>
 <pre>
-    public $paneTitleStyle;                  // If provided, it will be used for each pane (containing a form)
-    public $tdWrapOptions;                   // Options for the <td> element of each cell (containing a form)
-    public $nCols;                           // Number of columns in the table of forms.  This attribute needs to be public, because in some cases
-                                             //            (involving table cells spanning multiple rows) it must be modified during execution
-    public $tableOptions = "border='1'";     // Styling for the larger table
-    
-    private $row = 1;            // Current row in the construction of the Control Panel
-    private $col = 1;            // Current column
-    private $CPhtml = "";        // HTML forming the Control Panel  
+public $paneTitleStyle;                  // If provided, it will be used for each pane (containing a form)
+public $tdWrapOptions;                   // Options for the <td> element of each cell (containing a form)
+public $nCols;                           // Number of columns in the table of forms.  This attribute needs to be public, because in some cases
+                                         //            (involving table cells spanning multiple rows) it must be modified during execution
+public $tableOptions = "border='1'";     // Styling for the larger table
+
+private $row = 1;            // Current row in the construction of the Control Panel
+private $col = 1;            // Current column
+private $CPhtml = "";        // HTML forming the Control Panel  
 </pre>
 
 <br>
@@ -948,13 +954,13 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
 <br><br>
 <h3>formBuilder &ndash; Public Properties</h3>
 <pre>
-public $title;                    // Optional title to display just before the <form> element
+public $title;                    // Optional title to display just before the &lt;form> element
 public $titleStyle = "font-weight:bold; color:brown; font-size:12px";    // Default style to be used for the title
 public $formStyle;                // CSS used on the form
 public $handler;                  // URL of script that will handle the form
 
 public $submitLabel = "Enter";    // Text to show on the Submit button
-public $hiddenOptions;            // Array of HTML attributes for an optional <hidden> control. E.g.
+public $hiddenOptions;            // Array of HTML attributes for an optional &lt;hidden> control. E.g.
                                   //        array("name='group' value='vert'" , 
                                   //              "name='plugin' value='t'")
                                   //        If just 1 element, it may optionally be passed as a string instead
@@ -1104,20 +1110,100 @@ public $hiddenOptions;            // Array of HTML attributes for an optional <h
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">logging </p>
   <p class="description">
-    TBA
-  </p>  
+    Class to log SYSTEM MESSAGES (such as alerts or diagnostics) into a text file or an HTML file<br>
+    &nbsp;&nbsp;&nbsp; &nbsp;<br>
+    &nbsp;&nbsp;&nbsp; &nbsp;<br>
+    &nbsp;&nbsp;&nbsp; &nbsp;<strong>DEPENDENCIES</strong>: &nbsp;None<br>
+    &nbsp;<br>
+    &nbsp;<br>
+    &nbsp;&nbsp;&nbsp; &nbsp;<strong>EXAMPLE OF USAGE:</strong><br>
+    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+  </p>
+
+  <div style="background:#eeeeee; border:1px solid #cccccc; padding:5px 10px">
+    <tt>
+    &nbsp; &nbsp; &nbsp; &nbsp; $myLog = new logging(&quot;myLogFile.htm&quot;);<br>
+    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$myLog-&gt;insertSeparator();<br>
+    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$myLog-&gt;fileLogging(&quot;Operation started&quot;);<br>
+    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$myLog-&gt;logMessage(1, &quot;some detail&quot;, &quot;font-weight:bold&quot;);<br>
+    &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$myLog-&gt;logErrorMessage(&quot;Operation FAILED&quot;);
+    </tt>
+  </div>
+   <br>
 </div>
 
-<h3>Public Properties</h3>
+<h3>Configurable Public Properties</h3>
 <pre>
-  
+public $logFile;                    // Name of file where to store the log messages.  If file already exists, the message gets appended; otherwise, the file gets created
+public $htmlLogging = true;            // Flag indicating whether the log file is meant to be an HTML file; if false, it will be regarded as a text file
+public $style = "";                    // Optional HTML styling to apply to the message; if present, a <span> tag is used
+public $indentAmount = 0;            // 0 indicates no indentation; higher integers represent progressively-increasing indentation (in points for HTML messages, or number of blanks for text ones)
+public $indentIncrementHTML = 15;    // Indent amount , relative to the previous message "level", in points (for HTML messages only)
+public $indentIncrementText = 3;    // Indent amount , relative to the previous message "level", in characters (for text messages only)
+public $timeStamp = true;            // Whether to timestamp the message
+public $extraPrefix = "";            // Optional extra prefix (at the very beginning)
+public $separator = "_____________________________________________________________________________________________________________________";  
 </pre>
 
 <br>
 <h3>Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;function &nbsp;__construct($logFilename)</strong><br>
+&nbsp;&nbsp; &nbsp;// Specify a filename to use for logging; it will generally be a .txt for or .htm filed depending on the &quot;htmlLogging&quot; property<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function logMessage($level, $msg, $style = &quot;&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;HIGH-level function to log the given text message to the designated log file (whose name is stored in the class property &quot;logFile&quot;). &nbsp;If the log file doesn&#39;t exist, it gets created.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A new line is added after each entry.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;level&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;An integer indicating the &quot;importance&quot;: 0 (most important), 1, 2, ...<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;msg&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The message to log<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;style&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Optional HTML styling to apply to the message, using a &lt;span&gt; tag. &nbsp;Do NOT include the &lt;span&gt; tag<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: true if successful, or false if not.<br>
+&nbsp;&nbsp; &nbsp; */</p>
 
+<p><br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function logErrorMessage($msg)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Log an error message. &nbsp;Same as regular logging, but with more emphasis, and the backtrace of the call stack<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp; &nbsp;<strong>public function insertSeparator()</strong><br>
+&nbsp;&nbsp; &nbsp;// Append the standard separator (and a new line) to the log file</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function fileLogging($msg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;LOW-level function to append the given message to the log file (or to create a log file, if not present.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A newline is automatically added.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If htmlLogging is enabled, then any HTML in the message (which could mess up the log file&#39;s viewing) is protected with htmlentities<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The message is optionally modified by:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- the string: &quot;date time&quot;, where date is mm/dd/yy<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- an indentation<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- a user-specified prefix<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- a user-specifief HTML style<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: true if successful, or false if not.<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+
+
+
+  
 
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
