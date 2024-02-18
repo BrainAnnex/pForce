@@ -2,21 +2,23 @@
   <head>
     <style type="text/css">
   	   div.library {
-              width: 75%;
-              border: 1px solid #DDD; 
-              margin-left:50px; 
-              margin-top: 120px;
+          width: 75%;
+          border: 1px solid #DDD; 
+          margin-left:30px; 
+          margin-top: 120px;
           
-              -moz-border-radius:10px;
-              -webkit-border-radius:10px;
-              border-radius:15px;
-  			
-              font-family: Verdana, Arial, Helvetica, sans-serif;					
-              color: #000000; 
-              background-color: #CCFFFC;
-         
-              padding: 20px;
-          }
+          -moz-border-radius:10px;
+          -webkit-border-radius:10px;
+          border-radius:15px;
+          
+          font-family: Verdana, Arial, Helvetica, sans-serif;					
+          color: #000000; 
+          background-color: #CCFFFC;
+          
+          padding-left: 20px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
       p.name {
         font-size:24px;
       }
@@ -27,6 +29,7 @@
     </style>
   </head>
 
+  
 <body>
   
 
@@ -126,11 +129,12 @@ public static $path = "/";                // The path on the server in w
 
 
   
-
+  
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
   <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>    
-  <p>DEPENDENCIES:
+  <p class="description">Class for DATABASE-INTERFACE using the PDO functions<br>   
+  DEPENDENCIES:
    <br><br>
    - logging [optional]    
   </p>
@@ -149,37 +153,6 @@ public $errorSummary = "";              // Short version of the last database er
 public $errorDetails = "";              // Longer version of the last database error, if applicable
     
 public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in which to keep log of database errors (re-tries and outright failures)  
-</pre>
-
-<br>
-<h3>Public Methods</h3>
-  
-  
-
-<div class="library" style="">
-  <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>  
-</div>
-
-<h3>Public Properties</h3>
-<pre>
-  
-</pre>
-
-<br>
-<h3>Public Methods</h3>
-
-
-  
-
-<div class="library" style="">
-  <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>  
-</div>
-
-<h3>Public Properties</h3>
-<pre>
-  
 </pre>
 
 <br>
@@ -601,11 +574,326 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 
 
   
+
   
 
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
-  <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>  
+  <p class="name">directedGraphs</p>
+  <p class="description">
+  Each node can carry a set of user-defined "semantics" (such as "name" and "remarks"); likewise for each edges (for example "childSequenceNo")<br>
+  <br>
+  An optional SQL clause can optionally be set by the invoking module (typically to enforce access restrictions, permissions, etc.)<br>
+  <br>
+  <br> 
+  DEPENDENCIES:  <br>
+  <br> 
+        1) dbasePDO<br>
+        2) parameterValidation<br>
+ <br>   
+ <br>   
+  For debugging or logging purposes, the debugLogSQL() function available to thru the dbasePDO object may be used
+  <br>
+  Applications of DAGs include implementation of inter-related Categories or of social networks. 
+  </p>  
+</div>
+
+<h3>Public Properties</h3>
+<pre>
+public  $methodLog = "";            // Optional descriptive text log of the actions (typically modifications) 
+                                    //        done by an individual class method.  Each method that uses this, will first reset it
+                                    
+public  $methodErrors = "";         // Optional descriptive text that some methods use to pass error info to their calling code
+                                    //        Each method that uses this, will first reset it
+                                    
+public  $methodResults = false;     // Optional variable that some methods use to pass additional info to their calling code
+                                    //        Each method that uses this, will first reset it
+
+public  $MAX_DEPTH = 50;            // Large enough so that anything bigger is likely a runaway recursion
+
+public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's are autoincrement fields, and MySQL can cause problems when 0 is stored in an autoincrement field
+</pre>
+
+<br>
+<h3>Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;public function __construct($db, $nodesTable, $edgesTable, $traversalTable = &quot;&quot;) &nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;It&#39;s ok if the specified tables don&#39;t yet exist in the database.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;db&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Object of class &quot;dbasePDO&quot;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function setSQLclause($clause)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Set an optional clause to insert in all the lookup statements (e.g., the calling module might use this to enforce restrictions, permissions, etc.)<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p><br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function createNodesTable($semanticsDefs)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Create a database table for the nodes, only if it does not already exist.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Each node can carry a set of user-defined &quot;semantics&quot;, with the their definitions<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example: &nbsp;$semanticsDefs = array(&quot;name&quot; =&gt; &quot;varchar(60) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL&quot;,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &quot;remarks&quot; =&gt; &quot;varchar(100) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL&quot;);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return 0 if no errors (table may or may not be created) and -1 in case of errors.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: the table&#39;s autoincrement field starts at 1; there is no way (without access to the mysql server) to make it start at 0<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function createEdgesTable($semanticsDefs)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Create a database table for the edges, only if it does not already exist.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Each edge can carry a set of user-defined &quot;semantics&quot;, with the their definitions<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example: &nbsp;$semanticsDefs = array(&quot;childSequenceNo&quot; =&gt; &quot;smallint(5) unsigned DEFAULT &#39;0&#39; COMMENT &#39;used to list a node s children in a particular order&#39;&quot;);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return 0 if no errors (table may or may not be created) and -1 in case of errors<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;&nbsp; &nbsp;<br>
+&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function createTraversalTable()</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Create a database table for the saved graph traversal, only if it does not already exist.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return 0 if no errors (table may or may not be created) and -1 in case of errors<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;&nbsp; &nbsp;<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function setNodeAsRoot($nodeID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Mark the specified node as the ROOT by setting its ID to a pre-specified value (such as 1) stored in property CATEGORY_ROOT_NODE<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message; if successful, a blank string is returned<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function addChild($parentID, $semantics = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Add a Node with a child relationship to the specified parent; optionally populate the newly-added node with the specified semantics</p>
+
+<p>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If the optional $semantics argument is present, it is expected to be an array of [fieldName =&gt; fieldValue]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;elements to be added in the table of nodes for the newly-created record. &nbsp;Example: &nbsp;[&quot;name&quot; =&gt; &quot;myName&quot; , &quot;numField&quot; =&gt; 123] &nbsp; Do NOT place SQL quotes around the names!<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The property methodLog records the actions taken by this method (except error conditions.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: In case of failure, return an error message;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, a blank string is returned, the &quot;methodResults&quot; property is set to the AutoIncrement value for new node ID,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and the &quot;methodLog&quot; property is set to details of the process<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addEdge($parentID, $childID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Add a directed edge between the specified nodes (from parent to child.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message, and possibly set the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, a blank string is returned<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;TO-DO: must verify that no circularities get introduced<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function removeEdge($parentID, $childID)</strong>&nbsp;&nbsp; &nbsp;<br>
+&nbsp; &nbsp;&nbsp;/* &nbsp;&nbsp; &nbsp;Remove the edge between the specified nodes. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTANT: No check is done about the child node possibly becoming orphaned as a result. &nbsp;The calling function might opt to use the method numberParents() to determine if the node is an only child.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message, and possibly set the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, return a blank string.<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;&nbsp;<strong> &nbsp;public function switchParentNode($childID, $oldParentID, $newParentID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Switch a parent/child relationship between the specified nodes.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Take the child away from the old parent, and re-assign to the new one.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message, and possibly set the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, a blank string is returned<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function switchChildNode($parentID, $oldChildID, $newChildID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Switch a parent/child relationship between the specified nodes.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;From the parent, take the old child away , and relace it with the new child.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message, and possibly set the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, a blank string is returned<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function deleteNode($nodeID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Delete the specified node in the graph, including all the graph edges entering or leaving the node.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(The caller function ought to first to determine whether ok to delete the node. &nbsp;Also, no check is done to prevent deletion of the root)&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message, and possibly set the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, a blank string is returned<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function retrieveNodes($clause = &quot;&quot;, $sortOrder = &quot;&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Locate all the nodes, subject to the optional restriction, expressed as an SQL subquery clause: for example &quot;not isnull(`remarks`)&quot; &nbsp;[Note: this is above and beyond&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;the optional SQL clause specified in the class property &quot;SQLclause&quot;]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If a sort order is specified, it must be of a form &nbsp;suitable for a SQL query (example1: &quot;`name`&quot; &nbsp;; &nbsp;example2: &nbsp;&quot;`name`, `ID` DESC&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN a traversable data set of nodes, sorted by the specified field. &nbsp;Each entry is an array of 1 or more parts: ID and any present semantic fields (for example [ID, name, remarks, permissions])<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, return false.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function nodeSemanticsMatches($fieldName, $fieldValue)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Locate all the nodes whose value in the specified semantic field matches the given string (as a substring.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN an array of matches, sorted by the specified semantic field; each entry is an associative/enum array of at least 2 parts: [node ID, fieldName, any_other_semantic_fields].<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; In case of error, return false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This function is useful for searches.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;&nbsp;<strong> &nbsp;public function semanticsLookupSingleField($nodeID, $fieldName)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Look up and return the value of the specified semantic field for the given node.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example: &nbsp;semanticsLookupSingleField(123, &quot;`name`&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A blank string is returned if no semantics are found, or in case of error.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function semanticsLookup($nodeID, $fields = &quot;*&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Look up and return the semantics data of the specified node from its ID, as an array $fieldName =&gt; $fieldValue<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A blank string is returned if no semantics are found, or in case of error.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function updateNodeSemantics($nodeID, $newSemantics)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Change the semantic values attached to the specified node, as directed.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example: &nbsp;$newSemantics = array(&quot;name&quot; =&gt; &quot;someName&quot; , &quot;remarks&quot; =&gt; &quot;someRemarks&quot; , &quot;permissions&quot; =&gt; &quot;somePermissions&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: 1 if the record was modified, 0 if not (0 indicates an attempt to update to the same values that the record already had.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, an exception is thrown.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function fetchChildren($nodeID, $sortby = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Fetch all the children of the given node, optionally sorted as requested, within the constraints of the optional &quot;SQLclause&quot; property.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return a (possibly empty) an associative/enum array of elements that contain: [childID, &lt;all the semantic fields&gt;]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, false is returned.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: it&#39;s convenient to have an array as a result, because it can be rewound if desired, with the reset() function.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function fetchParents($nodeID, $sortby = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Fetch all the parents of the given node, optionally sorted as requested, within the constraints of the optional &quot;SQLclause&quot; property.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return a (possibly empty) associative/enum array of elements; each of them is an array that contains: [parentID, &lt;all the semantic fields&gt;]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, false is returned.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: it&#39;s convenient to have an array as a result, because it can be rewound if desired, with the reset() function.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp; <span style="color:#b22222">&nbsp;ADDED IN v. 4.2&nbsp;</span><br>
+<strong>&nbsp; &nbsp;public function numberParents($nodeID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return the number of parents of the given node, within the constraints of the optional &quot;SQLclause&quot; object property.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, false is returned.<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function fetchSiblings($nodeID, $sortby = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Fetch all the siblings of the given node, optionally sorted as requested, within the constraints of the optional SQL WHERE clause.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return a (possibly empty) associative/enum array of elements, each of whis is an associative array that contains: [ID, name, remarks].<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, false is returned.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: it&#39;s convenient to have an array as a result, because it can be rewound if desired, with the reset() function.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;function locateDanglingEdges()</strong><br>
+&nbsp;&nbsp; &nbsp;// Locate all the edges (ideally none) that lack a corresponding node at either (child or parent) end.<br>
+&nbsp;&nbsp; &nbsp;// Return an array of all such edges<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;function traverseGraphAndSave($sortby)&nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Traverse the graph from its root, and build (or rebuild) the array of graph-traversal information,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stored as the &quot;graphTraversal&quot; property, and saved in the table whose name is stored in the property &quot;traversalTable&quot;.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Traversal is done in pre-order (node first, then the traversals of its children in turn.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: an empty string if successful, or an error message in case of errors.<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;function traverseGraph($sortby)&nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Traverse the graph from its root, and build (or rebuild) the array of graph-traversal information,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;stored as the &quot;graphTraversal&quot; property.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Traversal is done in pre-order (node first, then the traversals of its children in turn.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: an empty string if successful, or an error message in case of errors.<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;function recursiveGraphTraversalInMemory($nodeID, $depth)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;Recursively traverse the directed graph, starting at the specified node, and update accordingly the array&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;in the &quot;graphTraversal&quot; property, adding to it info about the specified node (its ID and depth) and, recursively, about its children.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Information about the node&#39;s children is expected to be in memory, stored in the property &quot;edgeArray&quot;.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;To catch possible runaway recursions, the recursion is aborted if a depth of $MAX_DEPTH is reached.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;nodeID: &nbsp;&nbsp; &nbsp;starting point<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;depth:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;depth (in the graph traversal) of the starting-point node<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: an empty string if successful, or an error message in case of errors.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;SIDE EFFECTS: update the array in the &quot;graphTraversal&quot; property<br>
+&nbsp;&nbsp; &nbsp; */</p>
+ 
+
+
+
+  
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+<div class="library" style="">
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
 </div>
 
 <h3>Public Properties</h3>
@@ -615,32 +903,15 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 
 <br>
 <h3>Public Methods</h3>
-  
 
 
 
-  
-
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
-  <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>  
-</div>
-
-<h3>Public Properties</h3>
-<pre>
-  
-</pre>
-
-<br>
-<h3>Public Methods</h3>
-
-
-  
-
-
-<div class="library" style="">
-  <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>  
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
 </div>
 
 <h3>Public Properties</h3>
@@ -653,11 +924,12 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 
 
 
-  
-
-<div class="library" style="">
-  <p class="name">dbasePDO</p>
-  <p class="description">Class for DATABASE-INTERFACE using the PDO functions</p>  
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+ <div class="library" style="">
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
 </div>
 
 <h3>Public Properties</h3>
@@ -669,7 +941,76 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 <h3>Public Methods</h3>
 
 
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+ <div class="library" style="">
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
+</div>
+
+<h3>Public Properties</h3>
+<pre>
   
+</pre>
+
+<br>
+<h3>Public Methods</h3>
+
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+ <div class="library" style="">
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
+</div>
+
+<h3>Public Properties</h3>
+<pre>
+  
+</pre>
+
+<br>
+<h3>Public Methods</h3>
+
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+ <div class="library" style="">
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
+</div>
+
+<h3>Public Properties</h3>
+<pre>
+  
+</pre>
+
+<br>
+<h3>Public Methods</h3>
+
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+ <div class="library" style="">
+  <p class="name">TBA</p>
+  <p class="description">
+    TBA
+  </p>  
+</div>
+
+<h3>Public Properties</h3>
+<pre>
+  
+</pre>
+
+<br>
+<h3>Public Methods</h3>
+
+
+
+   
 
 
   
