@@ -887,22 +887,218 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
 
 
 
+
   
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
 <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">formBuilder</p>
   <p class="description">
-    TBA
+    Classes to easily build HTML forms, as well as "Control Panels" ("Dashboards") consisting of a table of such forms (each of which is referred to as a "pane")<br>
+        <br>
+    <br>
+    2 classes:<br>
+    <br>
+    controlPanel<br>
+        A Control Panel (aka Dashboard) is defined as a table of forms<br>
+    <br>
+    formBuilder<br>
+        A class to build and return simple HTML forms, especially suited for "Control Panels" (table of forms)<br>
+    <br>
+    <br>
+    <br>
+    DEPENDENCIES:  None
   </p>  
 </div>
 
-<h3>Public Properties</h3>
+<h3>controlPanel &ndash; Public Properties</h3>
 <pre>
-  
+    public $paneTitleStyle;                  // If provided, it will be used for each pane (containing a form)
+    public $tdWrapOptions;                   // Options for the <td> element of each cell (containing a form)
+    public $nCols;                           // Number of columns in the table of forms.  This attribute needs to be public, because in some cases
+                                             //            (involving table cells spanning multiple rows) it must be modified during execution
+    public $tableOptions = "border='1'";     // Styling for the larger table
+    
+    private $row = 1;            // Current row in the construction of the Control Panel
+    private $col = 1;            // Current column
+    private $CPhtml = "";        // HTML forming the Control Panel  
 </pre>
 
 <br>
-<h3>Public Methods</h3>
+<h3>controlPanel &ndash; Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;function __construct($nCols)&nbsp;&nbsp; &nbsp;// CONSTRUCTOR</strong><br>
+&nbsp; &nbsp; // Specify the number of columns in the table of forms</p>
+
+<p><br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addForm($form)</strong><br>
+&nbsp;&nbsp; &nbsp;// Add a form (an object of type &quot;formBuilder&quot;) to the Control Panel being built<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addGeneralPane($html)</strong><br>
+&nbsp;&nbsp; &nbsp;// Add a general pane (HTML consisting of &lt;td&gt; element and its content) to the Control Panel being built<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function generateCP()</strong><br>
+&nbsp;&nbsp; &nbsp;// Generate and return the Control Panel</p>
+
+
+  
+<br><br>
+<h3>formBuilder &ndash; Public Properties</h3>
+<pre>
+public $title;                    // Optional title to display just before the <form> element
+public $titleStyle = "font-weight:bold; color:brown; font-size:12px";    // Default style to be used for the title
+public $formStyle;                // CSS used on the form
+public $handler;                  // URL of script that will handle the form
+
+public $submitLabel = "Enter";    // Text to show on the Submit button
+public $hiddenOptions;            // Array of HTML attributes for an optional <hidden> control. E.g.
+                                  //        array("name='group' value='vert'" , 
+                                  //              "name='plugin' value='t'")
+                                  //        If just 1 element, it may optionally be passed as a string instead
+</pre>
+
+
+<br><br>
+<h3>formBuilder &ndash; Public Methods</h3>
+<p><tt><strong>&nbsp;&nbsp; &nbsp;function __construct($title, $handlerScript, $method = &quot;POST&quot;) &nbsp;{&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// CONSTRUCTOR</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp; &nbsp; &nbsp;$title&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Optional title (header text) to display just before the &lt;form&gt; element<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;$handlerScript&nbsp; &nbsp; &nbsp; URL of script that will handle the form. &nbsp;Use NULL if employing a JS handler<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;$method;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Method (&quot;POST&quot; or &quot;GET&quot;) to be used by the form to invoke its handler script<br>
+&nbsp;&nbsp; &nbsp;*/<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addJS_handler($func)</strong><br>
+&nbsp;&nbsp; &nbsp;// Specify a JS handler function, invoked when the form&#39;s submit button is clicked;<br>
+&nbsp;&nbsp; &nbsp;// &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;it will be the JS handler&#39;s responsibility, if desired, to submit the form with document.testform.submit()<br>
+&nbsp;&nbsp; &nbsp;//&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;An object containing the form is passed as argument to the JS function; for example, the function can extract the value of a field as: &nbsp;formObject.someFieldName.value<br>
+&nbsp;&nbsp; &nbsp;//&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;See https://www.javaworld.com/article/2077176/using-javascript-and-forms.html?page=2</tt><br>
+&nbsp;</p>
+
+<p><br>
+<tt><strong>&nbsp;&nbsp; &nbsp;public function addHeaderLine($labelString)</strong><br>
+&nbsp;&nbsp; &nbsp;// Append a row with the specififed label and a blank control. &nbsp;This pair might be used as a header at the top of the form, or as a mid-form sub-header/separator text<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addFooter($text)</strong><br>
+&nbsp;&nbsp; &nbsp;// Insert the given text (possibly HTML) at the very bottom of the form, right after the Submit button<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addBlankLine()</strong><br>
+&nbsp;&nbsp; &nbsp;// Append a row with a blank label and a blank control</tt><br>
+&nbsp;</p>
+
+<p><br>
+<tt><strong>&nbsp;&nbsp; &nbsp;public function addControl_General($labelString, $controlHTML)&nbsp;&nbsp; &nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Append a row with the specififed label and a general control (its HTML text).<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of a text-input control: &nbsp;&quot;&lt;input type=&#39;text&#39; name=&#39;someName&#39;&gt;&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;More specific methods in this class are provided for many common controls (such as text, pulldown menus, etc)&nbsp;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addControlText($label, $controlName, $size = null)&nbsp; &nbsp; &nbsp; </strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;// Append a row with the specififed label and a text control, optionally specifying the size of the text field<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addControl_Text($label, $controlName, $parArray = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Append a row with the specified label, and a text-input control with the given name and parameters.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The optional parameters of the text-input control are specified using entries of the $parArray argument; allowed values:&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;value&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;size&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;maxlength&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;id&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onclick&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onchange&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE: $parArray = array(&quot;size&quot; =&gt; &quot;3&quot; , &quot;maxlength&quot; =&gt; 5, &quot;value&quot; =&gt; &quot;123&quot; , &quot;onclick&quot; =&gt; &quot;myClickFunction()&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For now, a few JS events are handled on a case-by-case. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Later on, maybe turn them into an array such as &nbsp;&quot;js&quot; =&gt; array(&quot;onclick&quot; =&gt; &quot;myClickFunction()&quot; , &quot;onchange&quot; =&gt; &quot;myChangeFunction()&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;OR maybe: &nbsp;&quot;js&quot; =&gt; &quot;onclick=&#39;myClickFunction()&#39; onchange=&#39;myChangeFunction()&#39;&quot;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addControl_Checkbox($label, $controlName, $parArray = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Append a row with the specififed label, and a chebox control with the given name and parameters.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE: &nbsp;addControl_Checkbox(&quot;Gift wrapped?&quot;, &quot;gift&quot;, array(&quot;checked&quot; =&gt; true))<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Optional parameters are specified using elements of the $parArray argument; allowed values:&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;checked&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onclick&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onchange&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE: $parArray = array(&quot;size&quot; =&gt; &quot;3&quot; , &quot;maxlength&quot; =&gt; 5, &quot;value&quot; =&gt; &quot;123&quot; , &quot;onclick&quot; =&gt; &quot;myClickFunction()&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For now, a few JS events are handled on a case-by-case. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Later on, maybe turn them into an array such as &nbsp;&quot;js&quot; =&gt; array(&quot;onclick&quot; =&gt; &quot;myClickFunction()&quot; , &quot;onchange&quot; =&gt; &quot;myChangeFunction()&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;OR maybe: &nbsp;&quot;js&quot; =&gt; &quot;onclick=&#39;myClickFunction()&#39; onchange=&#39;myChangeFunction()&#39;&quot;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addControl_Password($label, $controlName, $parArray = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Append a row with the specififed label, and a password-input control.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Optional parameters are specified using elements of the $parArray argument; allowed values:&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;size&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;maxlength&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;id&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onclick&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onchange&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE: $parArray = array(&quot;size&quot; =&gt; &quot;3&quot; , &quot;maxlength&quot; =&gt; 5, &quot;value&quot; =&gt; &quot;123&quot; , &quot;onclick&quot; =&gt; &quot;myClickFunction()&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;TO-DO: maybe combine with addControl_Text() ?<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For now, a few JS events are handled on a case-by-case. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Later on, maybe turn them into an array such as &nbsp;&quot;js&quot; =&gt; array(&quot;onclick&quot; =&gt; &quot;myClickFunction()&quot; , &quot;onchange&quot; =&gt; &quot;myChangeFunction()&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;OR maybe: &nbsp;&quot;js&quot; =&gt; &quot;onclick=&#39;myClickFunction()&#39; onchange=&#39;myChangeFunction()&#39;&quot;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addControl_PulldownMenu($label, $menuDataset, $controlName, $selectedInstructions = &quot;[SELECT]&quot;, $optionsArray = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Append a row with the specififed label, and a pull-down menu.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$menuDataset &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Must be a traversable object; for example an array or something returned by an SQL select query; its entries may be single values or arrays.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If its entries are single values or arrays with 1 element, they are used for both the picked value and the shown value;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if they are arrays with 2+ elements, the 1st element is used for the picked value, and the 2nd one is used for the shown value.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$controlName&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A string representing an array. &nbsp;It MUST end in &quot;[]&quot;; for example, &quot;someName[]&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$selectedInstructions&nbsp;&nbsp; &nbsp;Optional. &nbsp;If present (and not over-ridden, see below), the first entry of the menu shows the specified string and is selected; its picked value is blanl<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$optionsArray&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Optional array. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Element &quot;style&quot;, if present, sets a CSS style for the &lt;select&gt; tag<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Element &quot;selected&quot;, if present, specifies a value in the dataset that will selected. &nbsp;This will only occur if the specified value actually occurs in the dataset; if it occurs, it will override $selectedInstructions, if applicable<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addControl_Hidden($name, $value)</strong><br>
+&nbsp;&nbsp; &nbsp;// Add a &quot;hidden input&quot; to the form, with the given name/value pair<br>
+&nbsp;&nbsp; &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$this-&gt;hiddenOptions[] = &quot;name=&#39;$name&#39; value=&#39;$value&#39;&quot;;<br>
+&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp;</tt></p>
+
+<p><tt>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function generateHTML($submitLabel = &quot;&quot;)&nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Create and return an HTML form (preceded by an optional title, specified at object-instantiation time.) &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The optional argument, if present, conveniently allows specifying a label insude the form&#39; SUBMIT button.<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;</tt></p>
+
+  
+  
 
 
 
