@@ -1122,7 +1122,7 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
   </p>
 
-  <div style="width=50%; background:#eeeeee; border:1px solid #cccccc; padding:5px 10px">
+  <div style="width:50%; background:#eeeeee; border:1px solid #cccccc; padding:5px 10px">
     <tt>
     &nbsp; &nbsp; &nbsp; &nbsp; $myLog = new logging(&quot;myLogFile.htm&quot;);<br>
     &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
@@ -1137,14 +1137,14 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
 
 <h3>Configurable Public Properties</h3>
 <pre>
-public $logFile;                    // Name of file where to store the log messages.  If file already exists, the message gets appended; otherwise, the file gets created
-public $htmlLogging = true;            // Flag indicating whether the log file is meant to be an HTML file; if false, it will be regarded as a text file
-public $style = "";                    // Optional HTML styling to apply to the message; if present, a <span> tag is used
-public $indentAmount = 0;            // 0 indicates no indentation; higher integers represent progressively-increasing indentation (in points for HTML messages, or number of blanks for text ones)
-public $indentIncrementHTML = 15;    // Indent amount , relative to the previous message "level", in points (for HTML messages only)
-public $indentIncrementText = 3;    // Indent amount , relative to the previous message "level", in characters (for text messages only)
-public $timeStamp = true;            // Whether to timestamp the message
-public $extraPrefix = "";            // Optional extra prefix (at the very beginning)
+public $logFile;                      // Name of file where to store the log messages.  If file already exists, the message gets appended; otherwise, the file gets created
+public $htmlLogging = true;           // Flag indicating whether the log file is meant to be an HTML file; if false, it will be regarded as a text file
+public $style = "";                   // Optional HTML styling to apply to the message; if present, a <span> tag is used
+public $indentAmount = 0;             // 0 indicates no indentation; higher integers represent progressively-increasing indentation (in points for HTML messages, or number of blanks for text ones)
+public $indentIncrementHTML = 15;     // Indent amount , relative to the previous message "level", in points (for HTML messages only)
+public $indentIncrementText = 3;      // Indent amount , relative to the previous message "level", in characters (for text messages only)
+public $timeStamp = true;             // Whether to timestamp the message
+public $extraPrefix = "";             // Optional extra prefix (at the very beginning)
 public $separator = "_____________________________________________________________________________________________________________________";  
 </pre>
 
@@ -1452,55 +1452,358 @@ public $loginURL;                             // URL to re-direct to if login is
   
 
 
+  
+
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">siteMembership </p>
   <p class="description">
-    TBA
+Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules<br>
+    <br>
+Based on the entity "User-access ID" : identifying a particular membership for some user<br>
+    <br>
+    <br>
+DEPENDENCIES: <br>  
+    <br>
+            - dbasePDO
   </p>  
 </div>
 
 <h3>Public Properties</h3>
 <pre>
-  
+public $errorSummary;            // Summary of the last error, if applicable  
 </pre>
 
 <br>
 <h3>Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;public function __construct($dbPDO)</strong><br>
+&nbsp;&nbsp; &nbsp;// Argument: &nbsp;Object for database operations<br>
+&nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function validateUser($dbField, $usernameOrEmail, $attemptedPassword, $marketingSlogan = &quot;&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Attempt to retrieve the membership record for the user with the provided credentials.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Verify that the credentials are valid and that the account is active.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$dbField &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Should be the string &quot;email&quot; or &quot;username&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$usernameOrEmail<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$attemptedPassword<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$marketingSlogan&nbsp;&nbsp; &nbsp;An optional string to be returned to the user in case the memberhips has expirerd<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If successful, return the array [ID, username] ; otherwise, return false and set the property &quot;errorSummary&quot; to the reason for failure<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function reValidatePassword($userID, $attemptedPassword)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;For safety, wheneven a user attempts to make important account changes.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return true if re-validation suceeeds, or false otherwise.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function changePassword($userID, $newPass)</strong><br>
+&nbsp;&nbsp; &nbsp;// Update the given user&#39;s password with a hashed version of the given new one<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function listActiveUsers($siteID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return a traversable dataset of ACTIVE users on the specified site, with all the available fields in the database table.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of a way to traverse it:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$allUsers = $siteMembership_object-&gt;listActiveUsers($siteID);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach ($allUsers as $user) &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;print_r($user);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo &quot;&lt;br&gt;&lt;br&gt;&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addUserToAccount($siteID, $username, $email, $pass, $permissions = 0)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Add a new user to the current site.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return the new userID if all operations were successful, or false othewise<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function addNewAccount($name, $email, $pass, $newSiteID = null)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Add a new account to the site, including a user who is an admin for that account.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Optionally, accept a value for the new siteID (typically used for sites identified by text codes, such as &quot;e&quot;, &quot;s&quot;);&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if a value isn&#39;t provided, the next available table record ID (for example 23) is used (as a string; for example &quot;23&quot;).<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return the new account ID if all operations were successful, or -1 othewise; in case of errors, also set the property &quot;errorSummary&quot;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;&nbsp;<br>
+&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function makeAdmin($userID, $siteManager = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Mark the specified user as an admin for their account - and, optionally, also as a Site Manager<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return true iff successful<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function setupDatabase()</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Create the table used for the membership information. &nbsp;To be used for installing a new site.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, an exception is thrown<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function alreadyInstalled()</strong><br>
+&nbsp;&nbsp; &nbsp;// Return true iff this module table is already installed<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function lookupUserByEmail($email)</strong><br>
+&nbsp;&nbsp; &nbsp;// Return the full record of the user with the given email address. &nbsp;If that email occurs in more than one place, the user with the largest ID is picked<br>
+&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function verifyUserCredentialsAndFetchUserInfo($userAccessID)&nbsp;&nbsp; &nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Extract and return all user-access field values (such as username, email, active flag, etc),<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while also enforcing the account to be active.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENT:&nbsp;&nbsp; &nbsp;The user&#39;s access ID<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: an associative array, containing the user&#39;s data. &nbsp;In case of error or record not found (possibly because account was inactive), return false.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function isUserActive($userAccessID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Verify the validity of the user access ID. &nbsp;Return true iff an ACTIVE user membership with the given ID is found<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function passwordRequirements()</strong><br>
+&nbsp;&nbsp; &nbsp;// Return a string explaining the password requirements. &nbsp;The message must match the policy set in the method passwordValidateRequirements()<br>
+&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function passwordValidateRequirements($pass)</strong><br>
+&nbsp;&nbsp; &nbsp;// Enforce password requirements. &nbsp;Any change needs to be also reflected in the method passwordRequirements()</p>
+
+  
 
 
+
+
+  
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">templateEvaluator </p>
   <p class="description">
-    TBA
+      <p><strong>Class for Template Evaluation: bare-bones counterpart of the Python library &quot;Jinja&quot;</strong><br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;<br>
+      <strong>DEPENDENCIES</strong>: &nbsp;None</p>
+      
+      <p>&nbsp;</p>
+      
+      <p><strong>USAGE EXAMPLES:</strong><br>
+      &nbsp;</p>
+      
+      <p><strong>&nbsp;&nbsp; &nbsp;1) simple field substitution:</strong><br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<code>&quot;Dear {{name}}, see you on {{day}}&quot;</code> &nbsp;. &nbsp;This is Jinja-like (different delimeters may be requested)</p>
+      
+      <p><br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp;<strong> &nbsp;2) if/then/else constructs:</strong><br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<code>{ [test] [if-branch string] [else-branch string] }</code><br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;where test can be: 1) a field (true if not null) ; or 2) &quot;field=string&quot;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example 1: &nbsp;<code>&quot;{ [phone] [are you still at {phone}?] [I lack your phone #] }&quot;</code><br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example 2: &nbsp;<code>&quot;{ [site=c] [some name] [some other name] }&quot;</code></p>
+      
+      <p><br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; <strong>&nbsp;3) pre-registered, site-provided (NOT user-provided!), functions:</strong><br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$templ_eval-&gt;registerFunction(&quot;foo&quot;);&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// foo() become Registed Function 1 for this site<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example: <code>&quot;Go to link {RF(1, {productID})}&quot;</code></p>
   </p>  
 </div>
 
 <h3>Public Properties</h3>
 <pre>
-  
+public  $errors = "";       // The last error message, if any  
 </pre>
 
 <br>
 <h3>Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;public function setTags($openTag, $closeTag)</strong><br>
+&nbsp;&nbsp; &nbsp;// To replace the default tags, if desired<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function &nbsp;evaluateTemplate($template, $replaceArray, $outputErrors = true)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;Example of template: &nbsp;&quot;Dear {{name}}, see you on {{day}}!&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of replaceArray: &nbsp;array(&quot;name&quot; =&gt; &quot;Valerie&quot; , &quot;city&quot; =&gt; &quot;SF&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Case-sensitive.<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;function exactStringDisplay($str, $caption = &quot;String&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/*<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This function is just for debugging.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Assemble and return the HTML to display, inside a boxed div element, the given string EXACTLY as it is,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;without any of the usual HTML printing substitutions. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For example &quot;one&lt;br&gt;&lt;b&gt;two&lt;/b&gt;&quot; will show up exactly as composed.<br>
+&nbsp; &nbsp;*/</p>
 
+
+
+  
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">uploader </p>
   <p class="description">
-    TBA
+Class to facilitate File Uploads<br>
+    <br>
+   <br> 
+    DEPENDENCIES:<br>
+    <br>
+        - logging
   </p>  
 </div>
 
 <h3>Public Properties</h3>
 <pre>
-  
+public $logger;                // Object of class "logging".  Use to log messages (diagnostics, etc) on the server
 </pre>
 
 <br>
 <h3>Public Methods</h3>
+<p><tt><strong>&nbsp;&nbsp; &nbsp;public function errorInfo()</strong><br>
+&nbsp;&nbsp; &nbsp;// Return the last error message generated by any method<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;</tt></p>
+
+<p><tt><strong>&nbsp;&nbsp; &nbsp;public function uploadFiles($upload_fileset_info, $dest_dir, $nameHandler, $postUploadHandler, $verbose = false) </strong>&nbsp;<br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Attempt to upload ONE OR MULTIPLE files to the specified destination directory.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Whenever each of the uploads is initially successful (got stored in a temporary file on the server), invoke the optional function stored in $nameHandler<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: the number of successful uploads. &nbsp;In case of error, the property &quot;errorMessage&quot; is set to an explanation of the error<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If any upload fails, the uploader skips to the next file upload<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;USAGE:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For a SINGLE file upload:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A) the calling form has a form with an entry such as:&nbsp;&nbsp; &nbsp;&lt;INPUT type=&#39;file&#39; name=&#39;myFile&#39;&gt;&nbsp;&nbsp; &nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;B) the form-processing script contains:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$upload_fileset_info = $_FILES[&quot;myFile&quot;];<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For a MULTIPLE file uploads:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A) the calling form has a set of entries such as:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&lt;INPUT type=&#39;file&#39; name=&#39;myFileList[]&#39;&gt;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(one per file to upload)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;B) the form-processing script contains:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$upload_fileset_info = $_FILES[&quot;myFileList&quot;];<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$upload_fileset_info&nbsp;&nbsp; &nbsp;(see USAGE, above)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$dest_dir &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;a relative or absolute path in the file system, incl. the final &quot;/&quot; &nbsp;. &nbsp;(For the same folder, use &quot;./&quot;) Any already-existing file with the same name will get over-written<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$nameHandler&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If FALSE, it indicates &quot;just use the same original name for the uploaded file&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If TRUE, it&#39;s expected to be the name of a function to invoke with 4 arguments: f($name, $tmp_name, $type, $size)&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;the original name of the file being uploaded<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$tmp_name&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;the temporary filename assigned by the server mid-upload (with full path)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$type&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;the uploaded file&#39;s MIME type<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$size&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;size of uploaded file&#39;s size in Bytes<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Tha function needs to return a file name to use for permanent file storage (possibly the same as the original name), or false in case of error (for example, a database error). &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;That function is also a convenient place for the invoking script to do all the necessary database operations.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$postUploadHandler&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;name of a function that gets invoked upon a successful file upload (for example, to take care of additional database update). &nbsp;Use FALSE to indicate no function<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$verbose&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;whether to print out (in addition to logging) any information or error messages<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$upload_fileset_info is an array of 5 elements, called:&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&quot;name&quot;,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&quot;type&quot;,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&quot;tmp_name&quot;,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&quot;error&quot;,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&quot;size&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Each element is either a value (in case of single uploads) or an array whose dimension equals the numbers of files being uploaded.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE of $upload_fileset_info in case of a SINGLE UPLOADED FILE:&nbsp;&nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[name] =&gt; sample-file.doc<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[type] =&gt; application/msword<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[tmp_name] =&gt; /tmp/path/phpVGCDAJ<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[error] =&gt; 0<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[size] =&gt; 450<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE of $upload_fileset_info in case of MULTIPLE FILES:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[name] =&gt; Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[0] =&gt; sample-file1.doc<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[1] =&gt; focus.jpg<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[type] =&gt; Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[0] =&gt; application/msword<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[1] =&gt; image/jpeg<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[tmp_name] =&gt; Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[0] =&gt; /tmp/phprS2u1w<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[1] =&gt; /tmp/php3oOgSr<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[error] =&gt; Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[0] =&gt; 0<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[1] =&gt; 0<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[size] =&gt; Array<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[0] =&gt; 22685<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[1] =&gt; 30733<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function uploadSingleFile($name, $type, $size, $tmp_name, $error, $dest_dir, $nameHandler, $postUploadHandler, $verbose = false) &nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;The first 5 arguments are the standard $_FILES array component. &nbsp;For an explanation of the remaining arguments, see uploadFiles()<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If a file with the requested name already exists, it gets overwritten.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return 1 if upload is successful, or 0 if not (i.e. the number of successful uploads). &nbsp;In case of error, the property &quot;errorMessage&quot; is set to an explanation of the error<br>
+&nbsp;&nbsp; &nbsp; */</tt><br>
+&nbsp;</p>
 
 
 
