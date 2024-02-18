@@ -48,7 +48,8 @@
   <span style="color: brown">pForce</span> &ndash; a PHP Web Framework : Reference Guide
 </h1>
 
-  
+
+<br><br><br>
 <h2>10 modules:</h2> 
 
   cookies, dbasePDO, directedGraphs, formBuilder, logging, parameterValidation, siteAuth, siteMembership, templateEvaluator, uploader
@@ -57,7 +58,7 @@
   
 <div class="library" style="">
   <p class="name">cookies</p>
-  <div class="description">Static class to handle COOKIES</div>
+  <div class="description"><b>Static class to handle COOKIES</b></div>
 </div>
 
 <h3>Public Properties</h3>
@@ -152,9 +153,9 @@ public static $path = "/";                // The path on the server in w
   <div class="description"><b>Class for DATABASE-INTERFACE using the PDO functions</b>
   <br>   
   <br>
-  DEPENDENCIES:
-   <br><br>
-   - logging [optional]    
+  <b>DEPENDENCIES:</b>
+  <br><br>
+  &nbsp;&nbsp; &nbsp; - logging [optional]    
   </div>
 </div>
   
@@ -323,7 +324,7 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array ( [field1] =&gt; 666 &nbsp;[field2] =&gt; 333)<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of usage:<br>
+<b>Example of usage:</b><br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultArray = selectSQLarrayNum($sql);<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach($resultArray as $row) &nbsp;{<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $row[&quot;field1&quot;] . &quot;&lt;br&gt;&quot;;<br>
@@ -605,7 +606,7 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
     An optional SQL clause can optionally be set by the invoking module (typically to enforce access restrictions, permissions, etc.)<br>
     <br>
     <br> 
-    DEPENDENCIES:  <br>
+    <b>DEPENDENCIES</b>:  <br>
     <br> 
           1) dbasePDO<br>
           2) parameterValidation<br>
@@ -926,7 +927,7 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
     <br>
     <br>
     <br>
-    DEPENDENCIES:  None
+    <b>DEPENDENCIES:</b>  None
   </div>  
 </div>
 
@@ -1130,10 +1131,10 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
     <br>
     &nbsp;&nbsp;&nbsp; &nbsp;<br>
     &nbsp;&nbsp;&nbsp; &nbsp;<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;<strong>DEPENDENCIES</strong>: &nbsp;None<br>
+    <strong>DEPENDENCIES</strong>: &nbsp;None<br>
     &nbsp;<br>
     &nbsp;<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;<strong>EXAMPLE OF USAGE:</strong><br>
+    <strong>EXAMPLE OF USAGE:</strong><br>
     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
   </div>
 
@@ -1228,10 +1229,10 @@ public $separator = "___________________________________________________________
      <b>Class with static functions for PARAMETER VALIDATION (for example, for site security)</b> <br>
      <br>
      <br>
-         DEPENDENCIES:  None<br>
+         <b>DEPENDENCIES:</b>  None<br>
      <br>
      <br>
-         USAGE EXAMPLE:<br>
+         <b>USAGE EXAMPLE:</b><br>
        <br> 
         &nbsp;&nbsp; &nbsp;    parameterValidation::validateInteger($myValue)
   </div>  
@@ -1318,7 +1319,7 @@ public $separator = "___________________________________________________________
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- A login table (specific to this module), to store the sessionID&#39;s&nbsp;</p>
       
       <p><br>
-      &nbsp;&nbsp;&nbsp; &nbsp;<strong>DEPENDENCIES: &nbsp;</strong><br>
+      <strong>DEPENDENCIES: &nbsp;</strong><br>
       &nbsp;<br>
       &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;- dbasePDO&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This in turn, depends on the &quot;logging&quot; class<br>
       &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- cookies&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Static methods to set, clear, read and check cookies<br>
@@ -1478,7 +1479,7 @@ public $loginURL;                             // URL to re-direct to if login is
     Based on the entity "User-access ID" : identifying a particular membership for some user<br>
     <br>
     <br>
-    DEPENDENCIES: <br>  
+    <b>DEPENDENCIES:</b> <br>  
     <br>
     &nbsp;&nbsp; &nbsp;       - dbasePDO
   </div>  
@@ -1700,7 +1701,7 @@ public  $errors = "";       // The last error message, if any
     <b>Class to facilitate File Uploads</b><br>
     <br>
     <br> 
-    DEPENDENCIES:<br>
+    <b>DEPENDENCIES:</b><br>
     <br>
     &nbsp;&nbsp; &nbsp;    - logging
   </div>  
@@ -1727,7 +1728,7 @@ public $logger;                // Object of class "logging".  Use to log message
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If any upload fails, the uploader skips to the next file upload<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;USAGE:<br>
+<b>USAGE:</b><br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For a SINGLE file upload:<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A) the calling form has a form with an entry such as:&nbsp;&nbsp; &nbsp;&lt;INPUT type=&#39;file&#39; name=&#39;myFile&#39;&gt;&nbsp;&nbsp; &nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
