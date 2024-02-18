@@ -168,7 +168,7 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 
 <br>
 <h3>Public Methods</h3>
-  
+
 
   
 
@@ -185,7 +185,422 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 <br>
 <h3>Public Methods</h3>
 
+<p><strong>&nbsp;&nbsp; &nbsp;public function setConnectionParameters($dbaseServer, $dbase, $dbUser, $pass)</strong><br>
+&nbsp;&nbsp; &nbsp;// Permits the setting of all 4 connection parameters at once<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function dbaseStart($retry = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;Create a new database connection. &nbsp;Any existing old connection gets cleared (forced restart.)</p>
 
+<p>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If successful, it saves the newly-created handle and returns true;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;in case of failure, it tries a second time, then it sets some error-reporting properties (plus optional file log) and returns false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;retry&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;flag indicating whether this is the second (and last) attempt<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function selectSQL($sql, $bindings = false)&nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Run the specified SELECT query, with or without bindings.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If the optional argument $bindings is specified, the SQL must contain one or more &quot;?&quot; (without quotes),&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and $bindings must contain an array of values, or a single value.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example1: $sql = &quot;SELECT * FROM mytable WHERE x = ? AND y = ?&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$bindings = array($value1, $value2)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A single binding value can also be passed without an array. [i.e. a scalar $s gets converted to array($s)]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example2: $sql = &quot;SELECT * FROM mytable WHERE x = :p1 AND y = :p2&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$bindings = array(&#39;:p1&#39; =&gt; $value1, &#39;:p2&#39; =&gt; $value2))<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN a (possibly emtpy) traversable associative/num dataset (aka &quot;PDO statement&quot;.)&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of ERROR, false is returned, and the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties are set; also, the error is logged.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The retry flag in the database object determines if a 2nd attempt is made in case of error.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;NOTES<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;=====<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If an ASSOCIATIVE dataset is desired instead of an associative/numeric one, just do:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result = selectSQL($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result-&gt;setFetchMode(PDO::FETCH_ASSOC);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[note: with an associative array, one cannot use the list() construct]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Likewise, if desiring a purely NUMERIC dataset, do:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result = selectSQL($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result-&gt;setFetchMode(PDO::FETCH_NUM);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If one wishes to determine how many records were retrieved, use pdo_num_rows() IF using a MySQL database<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;TYPICAL CALLING CODE:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;====================<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT a, b FROM table&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result = $dbaseHandler-&gt;selectSQL($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLES OF HOW TO USE THE RESULT:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;=================================&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(1)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach ($result as $row) &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$myFieldValue = $row[&quot;myFieldName&quot;];&nbsp;&nbsp; &nbsp;// An associative/numeric dataset is returned by default (see notes above.) &nbsp;Note that $row[0], etc., will also work<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo &quot;myFieldValue: $myFieldValue&lt;br&gt;&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(2)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while($row = $result-&gt;fetch())<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $row[&#39;field1&#39;]; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// $row[0], etc., will also work<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(3)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while($row = $result-&gt;fetch(PDO::FETCH_ASSOC))&nbsp;&nbsp; &nbsp;// The PDO::FETCH_ASSOC part is not strictly necessary, because the default is PDO::FETCH_BOTH<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $row[&#39;field1&#39;]; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(4)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while($row = $result-&gt;fetch(PDO::FETCH_NUM))&nbsp;&nbsp; &nbsp;// The PDO::FETCH_NUM part is not strictly necessary, because the default is PDO::FETCH_BOTH<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $row[0];&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(5)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultArray = $result-&gt;fetchall();&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// Transform the result into an array (containing all of the result-set rows);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for the individual entry (i.e. each dbase record) if one wishes a purely associative array, use fetchall(PDO::FETCH_ASSOC);&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;for a purely numeric arrays, use fetchall(PDO::FETCH_NUM)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;//&nbsp;&nbsp; &nbsp;An empty array is returned if there are zero results to fetch, or FALSE on failure<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// &nbsp;For convenience, the methods selectSQLarrayNum() and selectSQLarrayAssoc() are also available<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach($resultArray as $row) &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;... &nbsp;&nbsp; &nbsp;// like before<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(6)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT a, b FROM table&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result = $dbObject-&gt;selectSQL($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach ($result as $row) &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;list($a, $b) = $row;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo &quot;a: $a | b: $b&lt;br&gt;&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(7)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT a FROM table&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result = $dbObject-&gt;selectSQL($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultArray = $result-&gt;fetchall(PDO::FETCH_COLUMN);&nbsp;&nbsp; &nbsp;// An array with all the returned entries from the single column<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(8)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT f0, f1, f2, f3 FROM table&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$result = $dbObject-&gt;selectSQL($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;while(($columnValue = $result-&gt;fetchcolumn(2)) !== false)&nbsp;&nbsp; &nbsp;// Do NOT use on Boolean fields. &nbsp;See http://php.net/manual/en/pdostatement.fetchcolumn.php<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $columnValue;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// fetchColumn returns a single column from the next row of a result set&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(9)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Use fetch(PDO::FETCH_CLASS) or fetch(PDO::FETCH_INTO) to save the results into objects<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function selectSQLarrayNum($sql, $bindings = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Shortcut to invoking selectSQL() and then converting the entries of the returned dataset into a numeric array.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;An empty array is returned if there are zero results to fetch, or FALSE on failure.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of return value:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array ( [0] =&gt; 123 &nbsp;[1] =&gt; 222)&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array ( [0] =&gt; 666 &nbsp;[1] =&gt; 333)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of usage:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultArray = selectSQLarrayNum($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach($resultArray as $row) &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $row[0] . &quot;&lt;br&gt;&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;</p>
+
+<p><br>
+&nbsp;<strong>&nbsp; &nbsp;public function selectSQLarrayAssoc($sql, $bindings = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Shortcut to invoking selectSQL() and then converting the entries of the returned dataset into an associative array.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;An empty array is returned if there are zero results to fetch, or FALSE on failure.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of return value:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array(<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array ( [field1] =&gt; 123 &nbsp;[field2] =&gt; 222)&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array ( [field1] =&gt; 666 &nbsp;[field2] =&gt; 333)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example of usage:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultArray = selectSQLarrayNum($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;foreach($resultArray as $row) &nbsp;{<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;echo $row[&quot;field1&quot;] . &quot;&lt;br&gt;&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;}<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function selectSQLFirstRecord($sql, $bindings = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Run the specified SQL SELECT statement, and return the first row of the result (as an assoc/num array.)&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A &quot;LIMIT 1&quot; statement is automatically added to the SQL. &nbsp;WARNING: make sure that the $sql passed to it does not already have &nbsp;&quot;LIMIT&quot; statement; if it does, use the method selectSQLOneRecord() instead<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of no records, return null.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, return false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Typically used with SELECT statements that return a single record.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: pdo_num_rows() cannot be used after this function call,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;because the PDOstatement is not returned (maybe it could be saved in the object?)<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE 1:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT a, b, c FROM myTable&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;list($a, $b, $c) = $db-&gt;selectSQLFirstRecord($sql);<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE 2:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT * FROM myTable&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultRow = $db-&gt;selectSQLFirstRecord($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$a = $resultRow[&quot;a&quot;];<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$b = $resultRow[&quot;b&quot;];<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$c = $resultRow[&quot;c&quot;];<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function selectSQLOneRecord($sql, $bindings = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Run the specified SQL SELECT statement, and return the first row of the result (as an assoc/num array.)&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of no records, return null.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, return false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Typically used with SELECT statements that return a single record.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: pdo_num_rows() cannot be used after this function call,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;because the PDOstatement is not returned (maybe it could be saved in the object?)<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE 1:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT a, b, c FROM myTable ORDER BY a LIMIT 1&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;list($a, $b, $c) = $db-&gt;selectSQLFirstRecord($sql);<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE 2:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$sql = &quot;SELECT * FROM myTable&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$resultRow = $db-&gt;selectSQLFirstRecord($sql);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$a = $resultRow[&quot;a&quot;];<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$b = $resultRow[&quot;b&quot;];<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$c = $resultRow[&quot;c&quot;];<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function selectSQLOneValue($sql, $bindings = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Run the specifed SQL query (expected to be a SELECT statement.)<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN the first (zero-th) column of the first (zero-th) row.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of no records or error, return null. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The returned value might be a null if that&#39;s what contained in the database or returned by a database function in the SELECT statement.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Typically used with SELECT statements that return a single value, such as a count(*)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, return false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$myCount = selectSQLOneValue(&quot;SELECT count(*) FROM myTable WHERE ID &gt; 7&quot;);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTANT NOTE: Aggregate functions sometimes return null. &nbsp;For example, &quot;SELECT max(ID) myTable WHERE ID &gt; 100&quot; will return null if no records satisfy the condition;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;the calling function may test for this with the &quot;===&quot; identity check, as follows : &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if ($result === null) // to distinguish no records found vs. a returned value of zero<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Note: pdo_num_rows() cannot be used after this function call,&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;because the PDOstatement is not returned (maybe it could be saved in the object?)<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function selectSQLOneColumn($sql, $columnPosition, $bindings = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return a numeric array with the values of the specified column from the result of the SQL query;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;in case of error, return false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Column positions are counted from zero (i.e., 0 corresponds to the first column)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;WARNING: do NOT use on Boolean fields. &nbsp;See http://php.net/manual/en/pdostatement.fetchcolumn.php<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function isInTable($table, $field, $value)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return true if the given value is found at least once (in any row) in the specified field in the given table;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;false, otherwise<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;isInTable(&quot;myTable&quot;, &quot;field1&quot;, 123)<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;</p>
+
+<p><br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function pdo_num_rows($PDOstatement)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;This function emulates mysql_num_rows(), but only works for MySQL databases.<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;1) &nbsp;&nbsp; &nbsp;It returns the number of rows affected by the last DELETE, INSERT, or UPDATE statement executed by the specified PDOStatement object.&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;2) &nbsp;&nbsp; &nbsp;If the last SQL statement executed by the associated PDOStatement was a SELECT statement, some databases may return the number of rows returned by that statement.&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;However, this behaviour is not guaranteed for all databases and should not be relied on for portable applications.&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;(See &nbsp;http://php.net/manual/en/pdostatement.rowcount.php &nbsp;and &nbsp;http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, it return false<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function pdo_result($PDOstatement, $rowCount, $field)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Emulates mysql_result()<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function countRecords($table, $selectSubquery = &quot;&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return the number of records in the given table when the specified subquery (the part *after* the WHERE in the sql query) is applied;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if the subquery is a blank string or missing, then the total number of records in the table is returned.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, return false. &nbsp;A === false check on the return value should be done to distinguish zero records from an error condition.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE: &nbsp;$number_of_records = countRecords(&quot;myTable&quot; , &quot;`ID` &gt; `0&quot;);<br>
+<strong>&nbsp;&nbsp; &nbsp; */</strong></p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function modificationSQL($sql, $bindings = false)&nbsp;</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Run the specified &quot;modification&quot; SQL (i.e. UPDATE, INSERT, DELETE , CREATE TABLE , or DROP TABLE.)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If the optional argument $bindings is specified, the SQL must contain one or more &quot;?&quot; (without quotes),&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and $bindings must contain an array of values, or a single value.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example1: &nbsp;&nbsp; &nbsp;$sql = &quot;UPDATE myTable SET field = ? WHERE ID = ?&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$bindings = array($value1, $value2);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A single binding value can also be passed without an array. [i.e. a scalar $s gets converted to array($s)]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example2: &nbsp;&nbsp; &nbsp;$sql = &quot;UPDATE myTable SET x = :p1 AND y = :p2&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$bindings = array(&quot;:p1&quot; =&gt; $value1, &quot;:p2&quot; =&gt; $value2);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example3:&nbsp;&nbsp; &nbsp;$sql = &quot;INSERT INTO myTable (`col1`, `col2`)<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; VALUES (:username, :email)&quot;;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;and<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$bindings = array(&quot;:username&quot; =&gt; &quot;me myself&quot;, &quot;:email&quot; =&gt; &quot;a@b.com&quot;);<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of successful insert, update or delete operations, return the number of affected rows<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of successful create/drop table operations, return 0<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of error, -1 is returned, error messages are logged, and some error properties get set<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function retrieveInsertID()</strong><br>
+&nbsp;&nbsp; &nbsp;/* Return the auto-increment value from the last INSERT operation<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function createTable($tableName, $columnDefinitions, $primaryKey, $otherKeys = false, $tableOptions = &quot;ENGINE=InnoDB , DEFAULT CHARSET=latin1&quot;)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Create a mySQL table.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If successful, RETURN true; otherwise, return false and set error properties.</p>
+
+<p>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;See https://dev.mysql.com/doc/refman/5.5/en/create-table.html<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLES of arguments:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$tableName&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;myTable&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$columnDefinitions&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;`ID` smallint(5) unsigned NOT NULL AUTO_INCREMENT,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; `field1` varchar(16) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL, &nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; `field2` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; `field3` smallint(5) unsigned DEFAULT NULL, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; `field4` text CHARACTER SET latin1 COLLATE latin1_general_ci,&nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; `timeStamp` timestamp DEFAULT CURRENT_TIMESTAMP<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$primaryKey&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;`field1`, `field2`&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$otherKeys &nbsp;[OPTIONAL]&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;UNIQUE KEY `someNameForKey` (`field3`,`field4`)&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;KEY `sessionID` (`sessionID`), KEY `subID` (`subID`)&quot;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$tableOptions &nbsp;[OPTIONAL]&nbsp;&nbsp; &nbsp;&quot;ENGINE=MyISAM , DEFAULT CHARSET=latin1&quot;, AUTO_INCREMENT=69<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function getFieldNames($tableName)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Return an array of field names in the given table (or false in case of failure).<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Only tested on MySQL.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENT:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$tableName&nbsp;&nbsp; &nbsp;A string with the table&#39;s name. &nbsp;Example: &quot;myTable&quot; (do not wrap the name in database back quotes)<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp; &nbsp;&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function tableExists($table)</strong><br>
+&nbsp;&nbsp; &nbsp;// Return true iff the specified table already exists in the current database<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function allTables()</strong><br>
+&nbsp;&nbsp; &nbsp;// Return a numeric array with the names of all the tables in the current database, or false in case of error<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function extractForeignKeys($tableName)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Look up and return all the foreign keys of the given table.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This function may only work on MySQL.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN: a numeric array whose entries are associative arrays of the form &nbsp;[columnName, foreignTable, foreignColumn]<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If no foreign keys are present, an empty array is returned, or false in case of error.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array ( [0] =&gt; Array ( [columnName] =&gt; customerID [foreignTable] =&gt; customers [foreignColumn] =&gt; ID )&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[1] =&gt; Array ( [columnName] =&gt; shipperID &nbsp;[foreignTable] =&gt; shippers &nbsp;[foreignColumn] =&gt; ID )&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;)&nbsp;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function mapFieldsToForeignKeys($tableName)</strong><br>
+&nbsp;&nbsp; &nbsp;/*&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If no foreign keys are present, an empty array is returned, or false in case of error.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Example:<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Array( &quot;customerID&quot; =&gt; Array( [0] =&gt;&quot;customers&quot; , [1] =&gt; &quot;ID&quot;) ,<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &quot;shipperID&quot; &nbsp;=&gt; Array( [0] =&gt;&quot;shippers&quot; &nbsp;, [1] =&gt; &quot;ID&quot;)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;)<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;/*************************************<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; DEBUGGING METHODS<br>
+&nbsp;&nbsp; &nbsp; *************************************/</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function debugPrintSQL($sql, $bindings, $expandSQL = true)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return an HTML-formatted string with the SQL and the bindings.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and print out the full SQL (typically for debugging purposes) after expanding the bindings. &nbsp;TO-DO: take care of named bindings<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p><br>
+<strong>&nbsp;&nbsp; &nbsp;public function debugPrintTextSQL($sql, $bindings, $expandSQL = true)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return a plain-text string the SQL and the bindings.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and print out the full SQL (typically for debugging purposes) after expanding the bindings. &nbsp;TO-DO: take care of named bindings<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+<strong>&nbsp;&nbsp; &nbsp;public function debugLogSQL($sql, $bindings, $expandSQL = true)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Write to the log file a plain-text string the SQL and the bindings.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and log the full SQL (typically for debugging purposes) after expanding the bindings. &nbsp;TO-DO: take care of named bindings<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+
+  
   
 
 <div class="library" style="">
