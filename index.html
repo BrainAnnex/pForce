@@ -4,7 +4,7 @@
       div.library {
           width: 75%;
           border: 1px solid #DDD; 
-          margin-left:30px; 
+          margin-left:20px; 
           margin-top: 120px;
           
           -moz-border-radius:10px;
@@ -49,10 +49,12 @@
 </h1>
 
 
+  
 <br><br><br>
 <h2>10 modules:</h2> 
 
-  cookies, dbasePDO, directedGraphs, formBuilder, logging, parameterValidation, siteAuth, siteMembership, templateEvaluator, uploader
+  cookies, <a href="#dbasePDO">dbasePDO</a>, directedGraphs, formBuilder, logging, parameterValidation, siteAuth, siteMembership, templateEvaluator, uploader
+
 
   
   
@@ -148,6 +150,7 @@ public static $path = "/";                // The path on the server in w
   
   
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+<a name='dbasePDO'></a>
 <div class="library" style="">
   <p class="name">dbasePDO</p>
   <div class="description"><b>Class for DATABASE-INTERFACE using the PDO functions</b>
@@ -577,18 +580,18 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 <p><br>
 <strong>&nbsp;&nbsp; &nbsp;public function debugPrintSQL($sql, $bindings, $expandSQL = true)</strong><br>
 &nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return an HTML-formatted string with the SQL and the bindings.<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and print out the full SQL (typically for debugging purposes) after expanding the bindings. &nbsp;TO-DO: take care of named bindings<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and print out the full SQL (typically for debugging purposes) after expanding the bindings.<br>
 &nbsp;&nbsp; &nbsp; */</p>
 
 <p><br>
 <strong>&nbsp;&nbsp; &nbsp;public function debugPrintTextSQL($sql, $bindings, $expandSQL = true)</strong><br>
 &nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return a plain-text string the SQL and the bindings.<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and print out the full SQL (typically for debugging purposes) after expanding the bindings. &nbsp;TO-DO: take care of named bindings<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and print out the full SQL (typically for debugging purposes) after expanding the bindings.<br>
 &nbsp;&nbsp; &nbsp; */<br>
 <br>
 <strong>&nbsp;&nbsp; &nbsp;public function debugLogSQL($sql, $bindings, $expandSQL = true)</strong><br>
 &nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Write to the log file a plain-text string the SQL and the bindings.<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and log the full SQL (typically for debugging purposes) after expanding the bindings. &nbsp;TO-DO: take care of named bindings<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If requested, reconstruct and log the full SQL (typically for debugging purposes) after expanding the bindings.<br>
 &nbsp;&nbsp; &nbsp; */</p>
 
 
@@ -714,7 +717,7 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, return an error message, and possibly set the &quot;errorSummary&quot; and &quot;errorDetails&quot; properties;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;if successful, a blank string is returned<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;TO-DO: must verify that no circularities get introduced<br>
+<br>
 &nbsp;&nbsp; &nbsp; */<br>
 <br>
 &nbsp;&nbsp; &nbsp;<br>
@@ -1076,7 +1079,7 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&quot;onchange&quot;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE: $parArray = array(&quot;size&quot; =&gt; &quot;3&quot; , &quot;maxlength&quot; =&gt; 5, &quot;value&quot; =&gt; &quot;123&quot; , &quot;onclick&quot; =&gt; &quot;myClickFunction()&quot;)<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;TO-DO: maybe combine with addControl_Text() ?<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For now, a few JS events are handled on a case-by-case. &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Later on, maybe turn them into an array such as &nbsp;&quot;js&quot; =&gt; array(&quot;onclick&quot; =&gt; &quot;myClickFunction()&quot; , &quot;onchange&quot; =&gt; &quot;myChangeFunction()&quot;)<br>
