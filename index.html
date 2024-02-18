@@ -16,7 +16,7 @@
           background-color: #CCFFFC;
           
           padding-left: 20px;
-          padding-top: 10px;
+          padding-top: 0px;
           padding-bottom: 10px;
       }
       
@@ -905,10 +905,10 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
     2 classes:<br>
     <br>
     controlPanel<br>
-        A Control Panel (aka Dashboard) is defined as a table of forms<br>
+    &nbsp;&nbsp; &nbsp;    A Control Panel (aka Dashboard) is defined as a table of forms<br>
     <br>
     formBuilder<br>
-        A class to build and return simple HTML forms, especially suited for "Control Panels" (table of forms)<br>
+    &nbsp;&nbsp; &nbsp;    A class to build and return simple HTML forms, especially suited for "Control Panels" (table of forms)<br>
     <br>
     <br>
     <br>
@@ -1122,7 +1122,7 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
     &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
   </p>
 
-  <div style="background:#eeeeee; border:1px solid #cccccc; padding:5px 10px">
+  <div style="width=50%; background:#eeeeee; border:1px solid #cccccc; padding:5px 10px">
     <tt>
     &nbsp; &nbsp; &nbsp; &nbsp; $myLog = new logging(&quot;myLogFile.htm&quot;);<br>
     &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
@@ -1208,36 +1208,248 @@ public $separator = "___________________________________________________________
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">parameterValidation</p>
   <p class="description">
-    TBA
+    Class with static functions for PARAMETER VALIDATION (for example, for site security) <br>
+ <br>
+ <br>
+     DEPENDENCIES:  None<br>
+ <br>
+ <br>
+     USAGE EXAMPLE:<br>
+   <br> 
+        parameterValidation::validateInteger($myValue)
   </p>  
 </div>
 
-<h3>Public Properties</h3>
-<pre>
-  
-</pre>
 
 <br>
 <h3>Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;public static function validatePositiveInteger($arg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Check if the given argument is a positive, non-zero integer, (or a string representing such an integer.) &nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp; Return true if the check succeeded, or false if not<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validateInteger($arg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Check if the given argument is a positive integer (or a string representing such an integer.) &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return true if the check succeeded, or false if not<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validateNumeric($arg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Check if the given argument is a numeric quantity.&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Return true if the check succeeded, or false if not<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validateAlphanumeric($arg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Verify that the given argument is alphanumeric<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;</p>
 
+<p>&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validateAlphanumericOrBlank($arg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Verify that the given argument is alphanumeric or blank<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validateAlphanumericOrUnderscore($arg)</strong><br>
+&nbsp;&nbsp; &nbsp;/* Verify that the given argument is alphanumeric or underscore<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validateUsername($user)&nbsp; </strong>&nbsp; &nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;/* Verify that the given username (which might also be an email address or an ID) is drawn from the allowed character set&nbsp;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validatePassword($pass)</strong>&nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;/* Verify that the given password is drawn from the allowed character set&nbsp;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public static function validatePattern($string, $pattern, $debug = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Check the given string value against the specified RegEx pattern.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If it matches (or if it&#39;s an empty string), return true; otherwise print out the given error message (details based on the $stage flag) and return false.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;EXAMPLE:&nbsp;&nbsp; &nbsp;validatePattern($ID, &quot;/^[0-9]+$/&quot;, &quot;ID must be an integer. &nbsp;Value provided: &amp;ldquo;$ID&amp;rdquo;&quot;, true);<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+
+  
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
  <div class="library" style="">
-  <p class="name">TBA</p>
+  <p class="name">siteAuth</p>
   <p class="description">
-    TBA
+      <p><strong>Class for SITE USER AUTHENTICATION, incl. login/logout management.</strong><br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;Multiple independent websites are supported.<br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;Authenticated user access is implemented by using randomly-generated session ID&#39;s, stored in a cookie on the client side,&nbsp;<br>
+      &nbsp;&nbsp; &nbsp;and in the database on the server side.<br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;The central entity for site authentication is the &quot;User Access ID&quot;, which can be thought of as a particular &quot;subscription&quot; (account) of a user to a site.<br>
+      &nbsp;&nbsp; &nbsp;A particular user might have multiple subscriptions (accounts) on different sites, and even multiple ones on a single site.<br>
+      &nbsp;&nbsp; &nbsp;The &quot;User Access ID&quot; resolves the particular subscription (account) on a particular site.</p>
+      
+      <p>&nbsp;&nbsp; &nbsp;On the server side, it makes use of 1 database table:<br>
+      &nbsp;&nbsp; &nbsp;<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- A login table (specific to this module), to store the sessionID&#39;s&nbsp;</p>
+      
+      <p><br>
+      &nbsp;&nbsp;&nbsp; &nbsp;<strong>DEPENDENCIES: &nbsp;</strong><br>
+      &nbsp;<br>
+      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;- dbasePDO&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This in turn, depends on the &quot;logging&quot; class<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- cookies&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Static methods to set, clear, read and check cookies<br>
+      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;- logging&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Use to log messages (diagnostics, etc) on the server</p>
   </p>  
 </div>
 
 <h3>Public Properties</h3>
 <pre>
-  
+public $loginTable = "entry";                 // Name of table used to store the session info 
+public $db;                                   // An object of the "dbasePDO" class, to interact with the database
+
+public $cookieSession = "pforce";             // Name of cookie with the sessionID
+public $cookieUsername = "username";          // Name of cookie used to store the user name
+public $cookieOld = "old";                    // Name of cookie used to store the first few digits of the old session ID
+
+public $userAccessID = false;                 // ID that identifies an instance of user access; typically, either a User ID or a Subscription ID.  If not logged it, then false
+
+public $errorMessage = "";                    // It gets set with an explanatory string in case of errors
+
+public $messageLogger;                        // An object of the "logging" class
+
+public $allowMultipleLogins = true;           // Flag indicating whether the same user account is allowed to be accessed through multiple simultaneous logins
+                                            
+public $maxLoginHours = 9;                    // Login expiration time, in hours.  Only applicable if allowMultipleLogins is false
+
+public $loginURL;                             // URL to re-direct to if login is required but user isn't logged in 
 </pre>
 
 <br>
 <h3>Public Methods</h3>
+<p><strong>&nbsp;&nbsp; &nbsp;function __construct($db, $messageLogger)&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;// CONSTRUCTOR</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;$db: An object of the &quot;dbasePDO&quot; class, to interact with the database<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$messageLogger: An object of the &quot;logging&quot; class, to log system messages (such as alerts or diagnostics) into a text file or an HTML file<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function userLoginStatusUnverified()</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Perform a *minimal* check of whether a user is logged in; only to be used in situations where restricted access isn&#39;t important.<br>
+&nbsp;&nbsp; &nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: &nbsp;if logged in, return the username; otherwise, set the property &quot;errorMessage&quot; with an explanation of the failed login, and return FALSE.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The session ID found in the user&#39;s cookie is NOT verified against the database.<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This function is a &quot;light&quot; version of userLoginStatus(), suitable for low-protection pages.&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Since no cookies are set, this function can be invoked anywhere; &nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;this is handy in situations where the page header has already been sent.&nbsp;<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function userLoginStatus()</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Perform a THOROUGH CHECK of the user&#39;s login status, based on the available session cookie value, checked against the database. &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTANT: this function MUST be invoked PRIOR to outputting any text, since it might set cookies.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUE: &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If logged in, set the property &quot;userAccessID&quot;, and also return that value.&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If not logged in, then completely log out user (clear his session variables, cookies, database info),&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;set the property &quot;errorMessage&quot; with an explanation of the failed login, and return FALSE.<br>
+&nbsp;&nbsp; &nbsp; */</p>
+
+<p>&nbsp;</p>
+
+<p><br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function &nbsp;validateLoginAndLookupUser()</strong><br>
+&nbsp;&nbsp; &nbsp;/* If user&#39;s login is validated, return the userAccessID (aka subscriptionID); otherwise, return false<br>
+&nbsp;&nbsp; &nbsp; */&nbsp;&nbsp; &nbsp;&nbsp;<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function loginUser($userAccessID, $username, $stayLogged, $visitorID = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;IMPORTANT: This function, because it may set cookies, must be called before any HTML output is started!<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Log in the user with the given ID<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$userAccessID&nbsp;&nbsp; &nbsp;Typically, a user ID or a subscription ID<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$username&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Redundant: passed for avoiding an extra database call<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$stayLogged&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Flag indicates whether the login is meant to be persistent upon closing the browser<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$visitorID&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Optional integer, for example to associate a login account with data collected from user prior to login<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A database connection is assumed.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;For security purposes, a new sessionID is always generated.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The session info is stored in the database table &nbsp;$this-&gt;loginTable<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;COOKIES<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$this-&gt;cookieSession:&nbsp;&nbsp; &nbsp;the session ID (also stored in the database)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$this-&gt;cookieUsername: for convenient access by low-value pages.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$this-&gt;cookieOld:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;the first few digits of the last sessionID, to clear old session values that may still linger around.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;This is useful for garbage-collecting of one-time logins in cases&nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;where the user closes the browser w/o logging out.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;RETURN VALUES<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If successful, return true; otherwise, false. &nbsp;If errors arose, they are noted in the property &quot;errorMessage&quot;, and also logged<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;on server<br>
+&nbsp;&nbsp; &nbsp; */&nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function logout($all = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* IMPORTANT: This function, because it may set cookies, must be called before any HTML output is started<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp; If the $all flag is set, then ALL login sessions by the current user (e.g. on different devices or browsers) are terminated.<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;<br>
+&nbsp;&nbsp; &nbsp; &nbsp; The username is returned (handy to greet goodbye to the user.)<br>
+&nbsp;&nbsp; &nbsp;*/&nbsp;<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function enforceLogin($loginPage = false)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Re-direct user to login page if not logged in. &nbsp;Perform a THOROUGH CHECK for the login status.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If user is logged in, return the userAccessID.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The database connection gets started if needed.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[Note: if using the &quot;pageBuilder&quot; module, this function is only used for pages that don&#39;t employ the startPage() function]<br>
+&nbsp;&nbsp; &nbsp; */<br>
+<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p>&nbsp;&nbsp; &nbsp;<br>
+<strong>&nbsp;&nbsp; &nbsp;public function redirectToLoginPage($loginPage)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Redirect user to the specified login page, and exit.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;A full URL is recommended over a relative path, to cover situations where the request comes from any pages in the site.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;The loginPage may not include a # fragment<br>
+&nbsp;&nbsp; &nbsp;*/<br>
+<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function loginCount($userAccessID)</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Return the number of logins that the user has done.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;Handy to optionally pass a login count to the login splash page<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;&nbsp; &nbsp;<br>
+&nbsp;&nbsp; &nbsp;</p>
+
+<p><strong>&nbsp;&nbsp; &nbsp;public function setupDatabase()</strong><br>
+&nbsp;&nbsp; &nbsp;/* &nbsp;&nbsp; &nbsp;Create the table used for managing the logins. &nbsp;To be used for installing a new site.<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;In case of failure, an exception is thrown<br>
+&nbsp;&nbsp; &nbsp; */<br>
+&nbsp;</p>
+
+  
 
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
