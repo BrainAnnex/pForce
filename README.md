@@ -1,28 +1,29 @@
 # pForce
-A thin Framework for PHP (including site logins).  Formerly used by the parent project BrainAnnex.org and other web sites/web apps.
+A **thin Framework for PHP** (including site logins).  Formerly used by the parent project BrainAnnex.org and other web apps.
 
 Use only what you need: pForce doesn't twist your arm to program your web app in any particular way! (In the spirit of Flask, in the Python world.)
 
 pForce: **May the *PHP* Force be with you!**
 
 
-The pForce Framework was originally developed as part of the "Brain Annex" project, but - as of version 4.0 - is now independent of it, and now no longer used by it.
+The pForce Framework was originally developed as part of the "Brain Annex" project, but - as of version 4.0 - is now independent of it.
 
 This framework has been in active, continuous use on multiple web apps for years - some components for about a decade - and has been *released to Open Source* in Oct. 2019 as version 4.0
 
-It is very modular, and it currently contains 10 components, with no external dependencies.
+It's based on PHP 7.2  (but it has also been used with PHP 5.6)
 
-**Note: this framework is no longer actively maintained. Its last update was in Apr. 2020, with version 4.2.  The parent project, "Brain Annex" (https://brainannex.org), was ported to Python/Flask.** 
+It is very modular, and it contains 10 components, with no external dependencies.
+
+**Note: this framework is no longer maintained. Its last update was in Apr. 2020, with version 4.2.  The parent project, "Brain Annex" (https://brainannex.org), was ported to Python/Flask and graph databases.** 
 
 
-# [DOCUMENTATION](https://brainannex.github.io/pForce/)
+# [Reference Guide](https://brainannex.github.io/pForce/)
 
-
-# 10 Components
 
 ![pForce modules and dependencies](docs/pForce_modules_and_dependencies.svg)
 
 
+# 10 Modules
 
 ## *cookies*
 
@@ -92,7 +93,8 @@ Class for Template Evaluation: bare-bones counterpart of the Python library "Jin
 
 Class to facilitate File Uploads
 
-# [DOCUMENTATION](https://brainannex.github.io/pForce)
+
+# [Reference Guide](https://brainannex.github.io/pForce/)
 
 
 
@@ -104,22 +106,28 @@ Important: pForce is no longer actively supported.   The parent project, Brain A
 4.2  (Apr. 17,  2020)
 
 In class  directedGraph , added public method numberParents($nodeID)
+
 4.1  (Dec. 13,  2019)
 
 In class dbasePDO, the 2nd argument of the method countRecords is now optional
 Hotfix to bug in the  addNewAccount  method of the   siteMembership  class, in file  siteMembership/siteMembership.php
+
 4.0.1  (Oct. 4,  2019)
 
 Hotfix to bug in the pdo_num_rows method of class dbasePDO, and tweaks to the logging class
+
 4.0  (Oct. 1,  2019)
 
 Initial Release to Open Source, and start of an independent existance from the Brain Annex project
+
 3.0  (June 14,  2018)
 
 Released as a set of components inside the Brain Annex web app
+
 2.0  (Sep. 29,  2017)
 
 Released as a set of components inside the Brain Annex web app
+
 1.0  (June 4,  2015)
 
 Released as a set of components inside the Brain Annex web app
