@@ -129,6 +129,31 @@
       	color: #333;
       	padding-left:3px;
       }
+
+
+
+      /* "Ordinary-looking" hyperlink styles usable against light backgrounds */
+      
+      a:link  {
+      	color:#000099;
+      	text-decoration:none;
+      }
+      
+      a:visited  {
+      	color:#000099;
+      	text-decoration:none;
+      }
+      
+      a:hover {
+      	color:red;
+      	text-decoration:none;
+      }
+      
+      a:active {
+      	color:red;
+      	text-decoration:none;
+      }
+
     </style>
   </head>
 
@@ -144,22 +169,24 @@
 <div class="scroll-canvas">
   
 
-<h1 style="margin-left:10px">
+<h1 style="margin-left:10px; margin-top: 10px">
   <span style="color: brown">pForce</span> &ndash; a PHP Web Framework : Reference Guide
 </h1>
 
 
   
 <br>
-<p>
-  NOTE : <b>THIS FRAMEWORK IS NO LONGER MAINTAINED</b>
+<p style="margin-left:10px; margin-top: 10px">
+  NOTE : <b>THIS FRAMEWORK IS NO LONGER MAINTAINED</b>.  It powered several version of the open-source project 
+  that originally developed it, <a href="https://brainannex.org">Brain Annex</a>, but that parent project has long 
+  moved on to a python/Flask framework, with a graph database.
 </p>
 
 
 
 <div class='sidebar-left'>
-  <b>10 modules</b>
-  <br>
+  <span style="font-size:20px; font-weight: bold">10 modules</span><br>
+  <br><br>
   <a href="#cookies">cookies</a><br><br>
   <a href="#dbasePDO">dbasePDO</a><br><br>
   <a href="#directedGraphs">directedGraphs</a><br><br>
@@ -200,12 +227,12 @@ public static $path = "/";                // The path on the server in w
 <h3>Public Methods</h3>
 
 <p><strong>&nbsp;&nbsp; &nbsp;public static function set($name, $value, $expire, $domain = false)</strong><br>
-<tt>&nbsp;&nbsp; &nbsp;/*&nbsp;&nbsp; &nbsp;Cookie-setting function. &nbsp;<br>
+<tt>&nbsp;&nbsp; &nbsp;/* &nbsp; Cookie-setting function. &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTANT: it must be called &nbsp;*prior* to outputting any text<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String with cookie name (cannot be empty)<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$value &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;String with cookie value<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; String with cookie name (cannot be empty)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$value &nbsp;&nbsp; &nbsp; &nbsp; String with cookie value<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$expire &nbsp;&nbsp;&nbsp; &nbsp;The time (expressed as a Unix timestamp) when the cookie is set to expire.<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If set to 0, it&#39;ll expire at the end of the session (when the browser closes)<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;To avoid having to deal with Unix-timestamp values, more specialized methods, such as setDays(), are also provided in this class.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
