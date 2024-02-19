@@ -103,13 +103,14 @@ Class to facilitate File Uploads
 
 Important: pForce is no longer actively supported.   The parent project, Brain Annex (https://brainannex.org), was ported to python/Flask and graph databases.
 
-4.2  (Apr. 17,  2020)
+**4.2 Final Release (Apr. 17,  2020)**
 
 In class  directedGraph , added public method numberParents($nodeID)
 
 4.1  (Dec. 13,  2019)
 
-In class dbasePDO, the 2nd argument of the method countRecords is now optional
+In class dbasePDO, the 2nd argument of the method countRecords is now optional  
+
 Hotfix to bug in the  addNewAccount  method of the   siteMembership  class, in file  siteMembership/siteMembership.php
 
 4.0.1  (Oct. 4,  2019)
@@ -131,6 +132,7 @@ Released as a set of components inside the Brain Annex web app
 1.0  (June 4,  2015)
 
 Released as a set of components inside the Brain Annex web app
- 
 
-NOTE: several modules that eventually became part of the pForce Framework had been developed years before, for various web sites.  They got incorporated into the Brain Annex web app as of v. 1.0
+--- 
+
+NOTE: several modules that eventually became part of the pForce Framework had been developed years before, for various websites.  They got incorporated into the Brain Annex web app as of v. 1.0
