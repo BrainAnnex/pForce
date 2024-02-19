@@ -34,11 +34,52 @@
       pre {
         margin-left: 20px;
       }
+
+      
+      /*
+        The "scroll-canvas" is the main part of the doumentation pages,
+        incl. the navbar at the top,
+        but EXCLUSIVE of the fixed left sidebar
+       */
+      
+      div.scroll-canvas {
+          margin-top:20px;    /* Leave space at the top for the fixed status bar, plus a small extra (+1) */
+      	margin-left:20%;    /* Should be matched to the "width" of "div.sidebar-left" */
+      	width:79.9%;        /* Needs to be a hair less that (100% - the above "margin-left"), to avoid a wasteful horiz scrollbar if there's a vertical one */
+      }
+
+      div.sidebar-left {            /* LEFT sidebar */
+      	box-sizing: border-box;     /* The assigned width will now incorporate padding and border */
+      	position:fixed;
+      	top:20px;
+      	left:0;
+      	width:20%;                  /* Should be matched to the "margin-left" of "div.scroll-canvas" */
+      	background:#e4dcdc;                 
+      	border-right:1px solid #d5d2d0;
+      	border-bottom:1px solid #0084AD;    /* Light blue */
+      
+      	overflow:auto;
+      	max-height:100%;
+      
+      	font-family: Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      	font-size: 11px;
+      	line-height: 20px;
+      	color: #333;
+      	padding-left:3px;
+      }
     </style>
   </head>
 
   
 <body>
+
+<div class='navmenu-header'>
+    <span style='font-weight:bold'><a href='/guide' title='BrainAnnex Guide'>pForce - Reference Guide</a></span>
+    <a style='margin-left:100px' href='#'>^TOP</a> 
+</div>
+
+  
+<div class="scroll-canvas">
   
 
 <h1 style="margin-left:10px">
@@ -53,10 +94,28 @@
   <a href="#cookies">cookies</a>, <a href="#dbasePDO">dbasePDO</a>, <a href="#directedGraphs">directedGraphs</a>, <a href="#formBuilder">formBuilder</a>, <a href="#logging">logging</a>, 
     <a href="#parameterValidation">parameterValidation</a>, <a href="#siteAuth">siteAuth</a>, <a href="#siteMembership">siteMembership</a>, <a href="#templateEvaluator">templateEvaluator</a>, <a href="#uploader">uploader</a>
 
+<br>
 <p>
   NOTE : <b>THIS FRAMEWORK IS NO LONGER MAINTAINED</b>
 </p>
 
+
+
+<div class='sidebar-left'>
+  <br>
+  <a href="#cookies">cookies</a>
+  <a href="#dbasePDO">dbasePDO</a>
+  <a href="#directedGraphs">directedGraphs</a>
+  <a href="#formBuilder">formBuilder</a>
+  <a href="#logging">logging</a>
+  <a href="#parameterValidation">parameterValidation</a>
+  <a href="#siteAuth">siteAuth</a>
+  <a href="#siteMembership">siteMembership</a>
+  <a href="#templateEvaluator">templateEvaluator</a>
+  <a href="#uploader">uploader</a>
+  <br>
+</div>    <!-- sidebar-left -->
+  
   
   
 <a name='cookies'></a>
@@ -1838,7 +1897,7 @@ public $logger;                // Object of class "logging".  Use to log message
 
    
 
-
+</div>  <!-- class="scroll-canvas" -->
   
 </body>
 </html>
