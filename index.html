@@ -50,11 +50,16 @@
 <br><br><br>
 <h2>10 modules:</h2> 
 
-  cookies, <a href="#dbasePDO">dbasePDO</a>, directedGraphs, formBuilder, logging, parameterValidation, siteAuth, siteMembership, templateEvaluator, uploader
+  <a href="#cookies">cookies</a>, <a href="#dbasePDO">dbasePDO</a>, <a href="#directedGraphs">directedGraphs</a>, <a href="#formBuilder">formBuilder</a>, <a href="#logging">logging</a>, 
+    <a href="#parameterValidation">parameterValidation</a>, <a href="#siteAuth">siteAuth</a>, <a href="#siteMembership">siteMembership</a>, <a href="#templateEvaluator">templateEvaluator</a>, <a href="#uploader">uploader</a>
 
+<p>
+  NOTE : <b>THIS FRAMEWORK IS NO LONGER MAINTAINED</b>
+</p>
 
   
   
+<a name='cookies'></a>
 <div class="library" style="">
   <p class="name">cookies</p>
   <div class="description"><b>Static class to handle COOKIES</b></div>
@@ -597,6 +602,7 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
   
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+<a name='directedGraphs'></a>
 <div class="library" style="">
   <p class="name">directedGraphs</p>
   <div class="description">
@@ -910,6 +916,7 @@ public  $CATEGORY_ROOT_NODE = 1;    // Not recommended to use 0 because nodeID's
 
   
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+<a name='formBuilder'></a>
 <div class="library" style="">
   <p class="name">formBuilder</p>
   <div class="description">
@@ -1124,8 +1131,9 @@ public $hiddenOptions;            // Array of HTML attributes for an optional &l
 
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+<a name='logging'></a>
 <div class="library" style="">
-  <p class="name">logging </p>
+  <p class="name">logging</p>
   <div class="description">
     <b>Class to log SYSTEM MESSAGES (such as alerts or diagnostics) into a text file or an HTML file</b>
     <br>
@@ -1223,7 +1231,8 @@ public $separator = "___________________________________________________________
 
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
- <div class="library" style="">
+<a name='parameterValidation'></a>
+<div class="library" style="">
   <p class="name">parameterValidation</p>
   <div class="description">
      <b>Class with static functions for PARAMETER VALIDATION (for example, for site security)</b> <br>
@@ -1300,7 +1309,8 @@ public $separator = "___________________________________________________________
   
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
- <div class="library" style="">
+<a name='siteAuth'></a>
+<div class="library" style="">
   <p class="name">siteAuth</p>
   <div class="description">
       <p><strong>Class for SITE USER AUTHENTICATION, incl. login/logout management.</strong><br>
@@ -1471,8 +1481,9 @@ public $loginURL;                             // URL to re-direct to if login is
   
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
- <div class="library" style="">
-  <p class="name">siteMembership </p>
+<a name='siteMembership'></a>
+<div class="library" style="">
+  <p class="name">siteMembership</p>
   <div class="description">
     <b>Class for the management of generic user accounts on a site: the underlying database table could have more fields, used by other more site-specific modules</b><br>
     <br>
@@ -1621,8 +1632,9 @@ public $errorSummary;            // Summary of the last error, if applicable
 
   
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
- <div class="library" style="">
-  <p class="name">templateEvaluator </p>
+<a name='templateEvaluator'></a>
+<div class="library" style="">
+  <p class="name">templateEvaluator</p>
   <div class="description">
       <p><strong>Class for Template Evaluation: bare-bones counterpart of the Python library &quot;Jinja&quot;</strong><br>
       &nbsp;&nbsp; &nbsp;<br>
@@ -1695,8 +1707,9 @@ public  $errors = "";       // The last error message, if any
   
 
 <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
- <div class="library" style="">
-  <p class="name">uploader </p>
+<a name='uploader'></a>
+<div class="library" style="">
+  <p class="name">uploader</p>
   <div class="description">
     <b>Class to facilitate File Uploads</b><br>
     <br>
