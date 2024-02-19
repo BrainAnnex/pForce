@@ -36,6 +36,68 @@
       }
 
       
+
+      body {
+      	margin: 10px;		/* The margin-left of the div.title must match against this */
+      }
+      
+      
+      /* 
+      	NAVIGATION 
+       */
+       
+      div.navmenu-header  {	/* The first (header) line in the navmenu */
+      	width: 100%;
+      	
+      	border: 1px solid #0084AD;	/* Mid-tone blue */
+      	/*margin-left: auto;
+      	margin-right: auto; */		/* <-- COMMENTED OUT the horizontal centering */
+      	margin-bottom:0px;	
+      	background-color:#547698;	/* A shade of blue.  For brighter blue: #336699 .  Also tried: #446688 */
+      	
+      	
+      	height:14px;		/* It must agree with the margin-top value in the @media line for fixed elements (after adjusting for padding) */
+      	line-height: 14px;	/* It must be same as height, above.  It's used to vertically center text */
+      	background:black;
+      	padding-top:2px;
+      	padding-left:10px;
+      	padding-bottom:3px;
+      	margin-bottom:0;
+      	font-family: Verdana, Arial, Helvetica, sans-serif;
+      	color: #F67347;		/* A slightly lighter version of the site's main color theme */
+      	font-size:10px;
+      	
+      	position:fixed;
+      	top:0; 
+      	left:0; 
+      	right:0; 
+      	z-index:2;			/* Keep in front of other elements */
+      }
+      
+      /* For links in navmenu-header : zap the underscores.  Override any other setting (e.g. those inherited) */
+      
+      .navmenu-header  a:link  {
+      	text-decoration: none !important;
+      	color:#eeeeee !important;
+      }
+      
+      .navmenu-header  a:visited  {
+      	text-decoration: none !important;
+      	color:#eeeeee !important;
+      }
+      
+      .navmenu-header  a:hover {
+      	text-decoration: none !important;
+      	color:#FF5151 !important;				/* Ligh red */
+      }
+      
+      .navmenu-header  a:active {
+      	text-decoration: none !important;
+      	color:#FF5151 !important;				/* Ligh red */
+      }
+
+
+      
       /*
         The "scroll-canvas" is the main part of the doumentation pages,
         incl. the navbar at the top,
@@ -43,7 +105,7 @@
        */
       
       div.scroll-canvas {
-          margin-top:20px;    /* Leave space at the top for the fixed status bar, plus a small extra (+1) */
+        margin-top:20px;    /* Leave space at the top for the fixed status bar, plus a small extra (+1) */
       	margin-left:20%;    /* Should be matched to the "width" of "div.sidebar-left" */
       	width:79.9%;        /* Needs to be a hair less that (100% - the above "margin-left"), to avoid a wasteful horiz scrollbar if there's a vertical one */
       }
