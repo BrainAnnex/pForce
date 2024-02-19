@@ -169,7 +169,7 @@
 <div class="scroll-canvas">
   
 
-<h1 style="margin-left:10px; margin-top: 10px">
+<h1 style="margin-left:10px; margin-top: 15px">
   <span style="color: brown">pForce</span> &ndash; a PHP Web Framework : Reference Guide
 </h1>
 
@@ -185,9 +185,9 @@
 
 
 
-<div class='sidebar-left' style="font-size: 14px; padding-left: 5px">
+<div class='sidebar-left' style="font-size: 14px; padding-left: 10px">
   <br>
-  <span style="font-size:20px; font-weight: bold">10 modules</span><br>
+  <span style="font-size:22px; font-weight: bold">10 modules</span><br>
   <br><br>
   <a href="#cookies">cookies</a><br><br>
   <a href="#dbasePDO">dbasePDO</a><br><br>
@@ -233,8 +233,8 @@ public static $path = "/";                // The path on the server in w
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;IMPORTANT: it must be called &nbsp;*prior* to outputting any text<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;ARGUMENTS<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name &nbsp;&nbsp;&nbsp; &nbsp;  String with cookie name (cannot be empty)<br>
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$value &nbsp;&nbsp; &nbsp;  String with cookie value<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$name &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;String with cookie name (cannot be empty)<br>
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$value &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;String with cookie value<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$expire &nbsp;&nbsp;&nbsp; &nbsp;The time (expressed as a Unix timestamp) when the cookie is set to expire.<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;If set to 0, it&#39;ll expire at the end of the session (when the browser closes)<br>
 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;To avoid having to deal with Unix-timestamp values, more specialized methods, such as setDays(), are also provided in this class.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<br>
@@ -751,8 +751,9 @@ public $dbLogFile = "";                 // Optional [VERY RECOMMENDED] file in w
 <div class="library" style="">
   <p class="name">directedGraphs</p>
   <div class="description">
-    <b>Each node can carry a set of user-defined "semantics" (such as "name" and "remarks"); likewise for each edges (for example "childSequenceNo")</b>
+    <b>Class to implement a Traversable Directed Acyclic Graph (DAG), consisting of Nodes and Directional Edges between 2 Nodes.</b><br>
     <br>
+    Each node can carry a set of user-defined "semantics" (such as "name" and "remarks"); likewise for each edges (for example "childSequenceNo")<br>
     <br>
     An optional SQL clause can optionally be set by the invoking module (typically to enforce access restrictions, permissions, etc.)<br>
     <br>
